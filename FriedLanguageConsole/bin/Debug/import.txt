@@ -1,0 +1,61 @@
+else if (Current.Type == SyntaxType.Keyword && Current.Text == "import")
+            {
+                Position++;
+
+                if (Current.Type == SyntaxType.Keyword && Current.Text == "native")
+                {
+                    Position++;
+                    if (Current.Type == SyntaxType.Keyword && Current.Text == "extend")
+                    {
+                        Position++;
+                        var ident = MatchToken(SyntaxType.Identifier);
+                        MatchTokenOptionally(SyntaxType.Semicolon, out _);
+
+                        return new NativeImportNode(ident,true);
+                    }
+                    else
+                    {
+                        var ident = MatchToken(SyntaxType.Identifier);
+                        MatchTokenOptionally(SyntaxType.Semicolon, out _);
+
+                        return new NativeImportNode(ident, false);
+                    }
+                }
+                if (Current.Type == SyntaxType.Keyword && Current.Text == "memory")
+                {
+                    Position++;
+                    if (Current.Type == SyntaxType.Keyword && Current.Text == "extend")
+                    {
+                        Position++;
+                        var expr = ParseExpression();
+                        MatchTokenOptionally(SyntaxType.Semicolon, out _);
+
+                        return new MemoryImportNode(Current, expr, true);
+                    }
+                    else
+                    {
+                        var expr = ParseExpression();
+                        MatchTokenOptionally(SyntaxType.Semicolon, out _);
+
+                        return new MemoryImportNode(Current, expr, false);
+                    }
+                }
+                else
+                {
+                    if (Current.Type == SyntaxType.Keyword && Current.Text == "extend")
+                    {
+                        Position++;
+                        var path = MatchToken(SyntaxType.String);
+                        MatchTokenOptionally(SyntaxType.Semicolon, out _);
+
+                        return new ImportNode(path,true);
+                    }
+                    else
+                    {
+                        var path = MatchToken(SyntaxType.String);
+                        MatchTokenOptionally(SyntaxType.Semicolon, out _);
+
+                        return new ImportNode(path, false);
+                    }
+                }
+            }

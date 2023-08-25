@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3840A6F5-A675-4312-A700-7C6951B786EC}</ProjectGuid>
+    <LangVersion>latest</LangVersion>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FriedLanguage</RootNamespace>
+    <AssemblyName>FriedLanguage</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CodeAnalysis, Version=4.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.Common.4.7.0\lib\netstandard2.0\Microsoft.CodeAnalysis.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=4.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.4.7.0\lib\netstandard2.0\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp.Scripting, Version=4.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.Scripting.4.7.0\lib\netstandard2.0\Microsoft.CodeAnalysis.CSharp.Scripting.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.Scripting, Version=4.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.Scripting.Common.4.7.0\lib\netstandard2.0\Microsoft.CodeAnalysis.Scripting.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Collections.Immutable, Version=7.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.7.0.0\lib\net462\System.Collections.Immutable.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reflection.Metadata, Version=7.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reflection.Metadata.7.0.0\lib\net462\System.Reflection.Metadata.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Encoding.CodePages, Version=7.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encoding.CodePages.7.0.0\lib\net462\System.Text.Encoding.CodePages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BuiltinType\FBaseFunction.cs" />
+    <Compile Include="BuiltinType\FBool.cs" />
+    <Compile Include="BuiltinType\FBuiltinType.cs" />
+    <Compile Include="BuiltinType\FClass.cs" />
+    <Compile Include="BuiltinType\FClassInstance.cs" />
+    <Compile Include="BuiltinType\FDictionary.cs" />
+    <Compile Include="BuiltinType\FDouble.cs" />
+    <Compile Include="BuiltinType\FException.cs" />
+    <Compile Include="BuiltinType\FFloat.cs" />
+    <Compile Include="BuiltinType\FFunction.cs" />
+    <Compile Include="BuiltinType\FInt.cs" />
+    <Compile Include="BuiltinType\FLabel.cs" />
+    <Compile Include="BuiltinType\FList.cs" />
+    <Compile Include="BuiltinType\FLong.cs" />
+    <Compile Include="BuiltinType\FNativeFunction.cs" />
+    <Compile Include="BuiltinType\FNativeLibraryImporter.cs" />
+    <Compile Include="BuiltinType\FNull.cs" />
+    <Compile Include="BuiltinType\FString.cs" />
+    <Compile Include="BuiltinType\FValue.cs" />
+    <Compile Include="Extentions\CoreCope.cs" />
+    <Compile Include="Extentions\ListExtensions.cs" />
+    <Compile Include="Interpreter.cs" />
+    <Compile Include="Lexer.cs" />
+    <Compile Include="LibMain.cs" />
+    <Compile Include="Models\Context.cs" />
+    <Compile Include="Models\InterpreterResult.cs" />
+    <Compile Include="Models\Parsing\Nodes\AssignVariableNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\BinaryExpressionNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\BlockNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\CsLiteral.cs" />
+    <Compile Include="Models\Parsing\Nodes\InitExplicitVariableNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\UnmatchNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\BreakNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\CallNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\CaseNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\CastNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\ClassDefinitionNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\ClassFunctionDefinitionNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\ClassPropDefinitionNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\ContinueNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\IndexerNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\DictNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\DotNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\ExportNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\FloatLiteralNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\ForeachNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\ForNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\FunctionDefinitionNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\GotoNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\IdentifierNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\IfNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\ImportNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\InitVariableNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\InstantiateNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\IntLiteralNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\LabelNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\ListNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\MemoryImportNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\NativeImportNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\RepeatNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\ReturnNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\StringLiteralNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\SwitchNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\ThrowNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\TokenNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\TryCatchNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\UnaryExpressionNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\WhileNode.cs" />
+    <Compile Include="Models\Parsing\NodeType.cs" />
+    <Compile Include="Models\Parsing\ParsingException.cs" />
+    <Compile Include="Models\Parsing\SyntaxNode.cs" />
+    <Compile Include="Models\SyntaxFacts.cs" />
+    <Compile Include="Models\SyntaxToken.cs" />
+    <Compile Include="Models\SyntaxType.cs" />
+    <Compile Include="Parser.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scope.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="StandartLibrary\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.4\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.4\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
