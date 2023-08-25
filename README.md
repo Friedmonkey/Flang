@@ -84,16 +84,17 @@ example.add("beautiful");
 example.add("World");
 return example;
 ```
+this will return 'Hello, beautiful, World'
 ##Classes
 Define and use classes in Flang:
 
-```class Person
+```
+class Person
 {
     string name = "";
 
     Person(nam)
     {
-        var name = "lol"; 
         self.name = nam;
     }
 
@@ -107,3 +108,27 @@ var p = new Person("John");
 p.hello();
 return p;
 ```
+
+you can also use the following syntax to run c# code 
+'
+<{
+MessageBox.Show("Hello World");
+}>
+'
+
+implement like this
+'
+func showMsg(text)
+{
+<{
+MessageBox.Show(context.getStr("text"));
+}>
+}
+'
+
+however this is compiled at runtime and will DEFINITELY slow down your code (up to 5 seconds!!)
+
+im looking to add a second variant of this that doesnt have access to any varibles but is simpily a function that takes a few arguments and can return some
+
+so that it can be pre compiled
+(taking longer at startup to compile, but then executes smoothly without any 3-5 second pauses)
