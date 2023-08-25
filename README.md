@@ -112,7 +112,7 @@ return p;
 you can also use the following syntax to run c# code 
 ```
 <{
-MessageBox.Show("Hello World");
+    MessageBox.Show("Hello World");
 }>
 ```
 
@@ -120,9 +120,9 @@ implement like this
 ```
 func showMsg(text)
 {
-<{
-MessageBox.Show(context.getStr("text"));
-}>
+    <{
+        MessageBox.Show(context.getStr("text"));
+    }>
 }
 ```
 
