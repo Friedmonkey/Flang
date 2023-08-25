@@ -85,7 +85,7 @@ example.add("World");
 return example;
 ```
 this will return 'Hello, beautiful, World'
-##Classes
+## Classes
 Define and use classes in Flang:
 
 ```
@@ -110,21 +110,21 @@ return p;
 ```
 
 you can also use the following syntax to run c# code 
-'''
+```
 <{
 MessageBox.Show("Hello World");
 }>
-'''
+```
 
 implement like this
-'''
+```
 func showMsg(text)
 {
 <{
 MessageBox.Show(context.getStr("text"));
 }>
 }
-'''
+```
 
 however this is compiled at runtime and will DEFINITELY slow down your code (up to 5 seconds!!)
 
