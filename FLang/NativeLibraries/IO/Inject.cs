@@ -8,7 +8,7 @@ namespace FriedLang.NativeLibraries
         {
             List<FlangMethod> methods = new()
             {
-                new FlangMethod("print", Global.Print, "message"),
+                new FlangMethod("print", Global.Print, "string message"),
 
                 new FlangMethod("read", Global.Read)
             };
@@ -22,9 +22,9 @@ namespace FriedLang.NativeLibraries
             var fileClass = new FlangClass("File", extends: false,
             methods: new FlangMethod[]
             {
-                    new FlangMethod("write",File.Write,ClassOptions.Static,"path","content"),
-                    new FlangMethod("read",File.Read,ClassOptions.Static,"path"),
-                    new FlangMethod("exists",File.Exists,ClassOptions.Static,"path"),
+                    new FlangMethod("write",File.Write,ClassOptions.Static,"string path","string content"),
+                    new FlangMethod("read",File.Read,ClassOptions.Static,"string path"),
+                    new FlangMethod("exists",File.Exists,ClassOptions.Static,"string path"),
             });
 
             classes.Add(fileClass);

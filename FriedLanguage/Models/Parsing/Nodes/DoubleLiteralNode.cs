@@ -7,31 +7,31 @@ using System.Threading.Tasks;
 
 namespace FriedLanguage.Models.Parsing.Nodes
 {
-    internal class IntLiteralNode : SyntaxNode
+    internal class DoubleLiteralNode : SyntaxNode
     {
-        public SyntaxToken intToken;
+        public SyntaxToken doubleToken;
 
-        public IntLiteralNode(SyntaxToken syntaxToken) : base(syntaxToken.Position, syntaxToken.EndPosition)
+        public DoubleLiteralNode(SyntaxToken syntaxToken) : base(syntaxToken.Position, syntaxToken.EndPosition)
         {
-            this.intToken = syntaxToken;
+            this.doubleToken = syntaxToken;
         }
 
         public override NodeType Type => NodeType.IntLiteral;
 
         public override FValue Evaluate(Scope scope)
         {
-            var fint = new FInt((int)intToken.Value);
-            return fint;
+            var fdouble = new FDouble((double)doubleToken.Value);
+            return fdouble;
         }
 
         public override IEnumerable<SyntaxNode> GetChildren()
         {
-            yield return new TokenNode(intToken);
+            yield return new TokenNode(doubleToken);
         }
 
         public override string ToString()
         {
-            return "IntLitNode:";
+            return "DoubleLitNode:";
         }
     }
 }

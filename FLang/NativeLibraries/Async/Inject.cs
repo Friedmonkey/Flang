@@ -10,7 +10,7 @@ namespace FriedLang.NativeLibraries
     {
         public override List<FlangMethod> InjectMethods()
         {
-            return new List<FlangMethod> { new FlangMethod("wait",Global.Wait,ClassOptions.Static, "time") };
+            return new List<FlangMethod> { new FlangMethod("wait",Global.Wait,ClassOptions.Static, "int time") };
         }
     }
 }

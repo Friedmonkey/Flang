@@ -22,7 +22,9 @@ namespace FriedLanguage.Models
                                        or "for" or "while" 
                                        or "repeat" or "times" 
 
-                                       or "func" or "var" or "class" or "prop" 
+                                       //or "func" 
+                                       //or "prop" 
+                                       or "var" or "class" 
                                        or "op" 
 
                                        or "static" or "const" 
@@ -92,7 +94,7 @@ namespace FriedLanguage.Models
                 case "then":
                     token.Type = SyntaxType.LBraces;
                     break;
-                case "end":
+                case "stop":
                     token.Type = SyntaxType.RBraces;
                     break;
                 default:

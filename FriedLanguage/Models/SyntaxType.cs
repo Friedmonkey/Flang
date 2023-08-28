@@ -34,9 +34,12 @@ namespace FriedLanguage.Models
         LParen,                     //  (
         RParen,                     //  )
         Int,                        //  [0-9]
+        Long,                       //  [0-9]XL
         Float,                      //  [0-9].?[0-9]
+        Double,                     //  [0-9].?[0-9]XL
         CsLit,                      //  <{cs code here}>
         String,                     //  "\w*"
+        VarString,                  //  $"\w*"
         LSqBracket,                 //  [
         RSqBracket,                 //  ]
         LBraces,                    //  {

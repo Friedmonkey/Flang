@@ -10,16 +10,8 @@ namespace FriedLang.NativeLibraries
 {
     public partial class Lang
     {
-        public static class String
+        public static class DateTime
         {
-            public static FValue Count(Scope scope, List<FValue> arguments)
-            {
-                if (arguments[0] is not FString self)
-                    throw new Exception("Expected argument 0 to be a string");
-
-                return new FInt(self.Value.Length);
-
-            }
             public static FValue ToInt(Scope scope, List<FValue> arguments)
             {
                 if (arguments[0] is not FString self)

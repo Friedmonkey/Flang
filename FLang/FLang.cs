@@ -7,6 +7,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -20,8 +21,9 @@ namespace FriedLang
 		{
 			_interpreter = new Interpreter();
 			_interpreter.GlobalScope.SetAdmin("imports",new FClass("imports",true,true));
-		}
-		public void AddNatives()
+            this.AddMethod(new FlangMethod("FlangFormat", Lang.String.FormatBase, "string formatable", "list lst"));
+        }
+        public void AddNatives()
 		{
 			ImportNative<IO>("io");
 			ImportNative<Lang>("lang");
@@ -69,7 +71,7 @@ namespace FriedLang
 
             return true;
         }
-        public List<FValue> ToFriedList(IEnumerable<object> List) 
+        public static List<FValue> ToFriedList(IEnumerable<object> List) 
 		{
 			var output = new List<FValue>();
             foreach (object item in List)
@@ -82,7 +84,7 @@ namespace FriedLang
             }
 			return output;
         }
-        public FValue ToFriedVar(object Value)
+        public static FValue ToFriedVar(object Value)
 		{
             if (Value is null)
                 return new FNull();
@@ -104,7 +106,7 @@ namespace FriedLang
 
             return null;
 		}
-        public List<(object, object)> ListFromFriedDictionary(object dict)
+        public static List<(object, object)> ListFromFriedDictionary(object dict)
         {
             if (dict is not FDictionary fdict)
                 return null;
@@ -113,7 +115,7 @@ namespace FriedLang
 
             return Dictionary;
         }
-        public Dictionary<object, object> FromFriedDictionary(object dict)
+        public static Dictionary<object, object> FromFriedDictionary(object dict)
         {
             if (dict is not FDictionary fdict)
                 return null;
@@ -122,7 +124,7 @@ namespace FriedLang
 
             return Dictionary;
         }
-        public List<(object,object)> ListFromFriedDictionary(List<(FValue, FValue)> Dict)
+        public static List<(object,object)> ListFromFriedDictionary(List<(FValue, FValue)> Dict)
         {
             List<(object, object)> Dictionary = new List<(object, object)>();
 
@@ -132,7 +134,7 @@ namespace FriedLang
             }
             return Dictionary;
         }
-        public Dictionary<object,object> FromFriedDictionary(List<(FValue,FValue)> Dict)
+        public static Dictionary<object,object> FromFriedDictionary(List<(FValue,FValue)> Dict)
         {
             Dictionary<object, object> Dictionary = new Dictionary<object, object>();
 
@@ -142,7 +144,7 @@ namespace FriedLang
             }
             return Dictionary;
         }
-        public List<object> FromFriedList(List<FValue> List)
+        public static List<object> FromFriedList(List<FValue> List)
         {
             var output = new List<object>();
             foreach (FValue item in List)
@@ -155,7 +157,7 @@ namespace FriedLang
             }
             return output;
         }
-        public object FromFriedVar(FValue Value)
+        public static object FromFriedVar(FValue Value)
         {
             if (Value is FNull)
                 return new FNull();

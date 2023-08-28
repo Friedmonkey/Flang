@@ -26,19 +26,33 @@ namespace FriedLang
             this.classStatic = source.classStatic;
             this.classExtend = source.classExtend;
             this.Implementation = source.Implementation;
-            this.ExpectedArguments = source.ExpectedArguments;
+
+            foreach (var arg in source.ExpectedArguments)
+            {
+                this.ExpectedArgumentTypes.Add(arg.Split(' ').First());
+                this.ExpectedArguments.Add(arg.Split(' ').Last());
+            }
         }
         public FlangMethod(string name, Implementation implementation, params string[] expectedArgs)
         {
             this.Name = name;
             this.Implementation = implementation;
-            this.ExpectedArguments = expectedArgs.ToList();
+
+            foreach (var arg in expectedArgs)
+            {
+                this.ExpectedArgumentTypes.Add(arg.Split(' ').First());
+                this.ExpectedArguments.Add(arg.Split(' ').Last());
+            }
         }
         public FlangMethod(string name, Implementation implementation, ClassOptions options, params string[] expectedArgs)
         {
             this.Name = name;
             this.Implementation = implementation;
-            this.ExpectedArguments = expectedArgs.ToList();
+            foreach (var arg in expectedArgs)
+            {
+                this.ExpectedArgumentTypes.Add(arg.Split(' ').First());
+                this.ExpectedArguments.Add(arg.Split(' ').Last());
+            }
 
             if ((options & ClassOptions.Static) != 0)
             {
@@ -59,6 +73,7 @@ namespace FriedLang
         public bool classExtend { get; set; }
         public Implementation Implementation { get; set; }
         public List<string> ExpectedArguments { get; set; } = new List<string>();
+        public List<string> ExpectedArgumentTypes { get; set; } = new List<string>();
     }
     public class FlangClass
     {

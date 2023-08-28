@@ -18,7 +18,8 @@ namespace FriedLanguage
     {
         //public List<(string name, int pos)> Labels = new();
         public List<SyntaxToken> Tokens { get; set; }
-        public List<string> DisabledKeywords = new List<string>();
+        public List<string> DisabledKeywords = new List<string>() { "unmatch" };
+        //unmatch keyword is pretty broken, so its disabled
         public string Code { get; }
 
         public int Position = 0;
@@ -466,14 +467,10 @@ namespace FriedLanguage
                         var expr = ParseExpression();
 
                         nodes.Add(new ClassPropDefinitionNode(ident,varType, expr, isStatic, fixedType, isConst, isNullable));
-
-                        //return new InitExplicitVariableNode(ident, varType, expr, fixedType, isConst, isNullable);
                     }
                     else
                     {
-                        //throw new Exception("Needs to be initazlized... for now.....");
                         nodes.Add(new ClassPropDefinitionNode(ident,varType, null, isStatic, fixedType, isConst, isNullable));
-                        //return new InitExplicitVariableNode(ident, varType, fixedType, isConst, isNullable);
                     }
 
 
@@ -901,11 +898,66 @@ namespace FriedLanguage
             var returnType = Current;
             Position++;
 
-            var name = MatchToken(SyntaxType.Identifier);
-            (var args,var types) = ParseFunctionArgs();
-            var body = ParseScopedStatements();
+            SyntaxToken? name = null; 
 
-            return new FunctionDefinitionNode(name, args, types, returnType, body, false); //never static
+            if (Current.Type == SyntaxType.Identifier) //we dont need an identifer
+                name = MatchToken(SyntaxType.Identifier);
+
+
+            (var args,var types) = ParseFunctionArgs();
+
+            SyntaxNode block;
+
+
+            if (Current.Type == SyntaxType.Arrow)
+            {
+                var arrow = MatchToken(SyntaxType.Arrow);
+                block = ParseScopedOrStatement();
+                block = new ReturnNode(arrow, block);
+            }
+            else
+            {
+                block = ParseScopedStatements();
+            }
+
+            return new FunctionDefinitionNode(name, args, types, returnType, block, false); //never static
+
+
+
+            //public SyntaxNode ParseFunctionExpression()
+            //{
+            //    MatchKeyword("func");
+
+            //    bool @override = false;
+
+            //    SyntaxToken? nameToken = null;
+
+            //    if (IsKeyword("override"))
+            //    {
+            //        Position++;
+            //        @override = true;
+            //    }
+
+            //    if (Current.Type == SyntaxType.Identifier)
+            //        nameToken = MatchToken(SyntaxType.Identifier);
+
+            //    (var args, var types) = ParseFunctionArgs();
+
+            //    SyntaxNode block;
+
+            //    if (Current.Type == SyntaxType.LBraces)
+            //    {
+            //        block = ParseScopedStatements();
+            //    }
+            //    else
+            //    {
+            //        var arrow = MatchToken(SyntaxType.Arrow);
+            //        block = ParseScopedOrStatement();
+            //        block = new ReturnNode(arrow, block);
+            //    }
+
+            //    return new FunctionDefinitionNode(nameToken, args, types, returnType, block,@override);
+            //}
         }
         //parse comparision expression  
         public SyntaxNode ParseCompExpression()
@@ -1081,41 +1133,69 @@ namespace FriedLanguage
                 var ident = MatchToken(SyntaxType.Int);
                 return new IntLiteralNode(ident);
             }
+            else if (Current.Type is SyntaxType.Long)
+            {
+                var ident = MatchToken(SyntaxType.Long);
+                return new LongLiteralNode(ident);
+            }
             else if (Current.Type is SyntaxType.Float)
             {
                 var ident = MatchToken(SyntaxType.Float);
                 return new FloatLiteralNode(ident);
             }
+            else if (Current.Type is SyntaxType.Double)
+            {
+                var ident = MatchToken(SyntaxType.Double);
+                return new DoubleLiteralNode(ident);
+            }
             else if (Current.Type is SyntaxType.String)
             {
                 var ident = MatchToken(SyntaxType.String);
 
-				if (Current.Type == SyntaxType.LSqBracket)
-				{
-					MatchToken(SyntaxType.LSqBracket);
-					var idxExpr = ParseExpression();
-					MatchToken(SyntaxType.RSqBracket);
+                if (Current.Type == SyntaxType.LSqBracket)
+                {
+                    MatchToken(SyntaxType.LSqBracket);
+                    var idxExpr = ParseExpression();
+                    MatchToken(SyntaxType.RSqBracket);
 
-					return new StringLiteralNode(ident, idxExpr);
-				}
+                    return new StringLiteralNode(ident, idxExpr);
+                }
 
-				return new StringLiteralNode(ident);
+                return new StringLiteralNode(ident);
+            }
+            else if
+            (
+                (
+                    Current.Text == "int" ||
+                    Current.Text == "string" ||
+                    Current.Text == "bool" ||
+                    Current.Text == "float" ||
+                    Current.Text == "double" ||
+                    Current.Text == "long" ||
+                    Current.Text == "object" ||
+                    Current.Text == "list" ||
+                    Current.Text == "dictionary" ||
+                    Current.Text == "void"
+                )
+            )
+            {
+                return ParseExplicitFunctionDefinition();
             }
             else if (Current.Type is SyntaxType.Identifier)
             {
                 var ident = MatchToken(SyntaxType.Identifier);
 
 
-				if (Current.Type == SyntaxType.LSqBracket)
-				{
-					MatchToken(SyntaxType.LSqBracket);
-					var idxExpr = ParseExpression();
-					MatchToken(SyntaxType.RSqBracket);
+                if (Current.Type == SyntaxType.LSqBracket)
+                {
+                    MatchToken(SyntaxType.LSqBracket);
+                    var idxExpr = ParseExpression();
+                    MatchToken(SyntaxType.RSqBracket);
 
-				    return new IdentifierNode(ident,idxExpr);
-				}
+                    return new IdentifierNode(ident, idxExpr);
+                }
 
-				return new IdentifierNode(ident);
+                return new IdentifierNode(ident);
             }
             else if (Current.Type is SyntaxType.LParen)
             {
@@ -1124,7 +1204,7 @@ namespace FriedLanguage
 
                 MatchToken(SyntaxType.RParen);
 
-				return expr;
+                return expr;
             }
             else if (Current.Type is SyntaxType.LSqBracket)
             {
@@ -1138,11 +1218,11 @@ namespace FriedLanguage
             {
                 return ParseIfExpression();
             }
-			else if (IsKeyword("switch"))
+            else if (IsKeyword("switch"))
             {
-				return ParseSwitchExpression();
-			}
-			else if (IsKeyword("try"))
+                return ParseSwitchExpression();
+            }
+            else if (IsKeyword("try"))
             {
                 return ParseTryCatchExpression();
             }
@@ -1150,11 +1230,11 @@ namespace FriedLanguage
             {
                 return ParseForExpression();
             }
-			else if (IsKeyword("foreach"))
+            else if (IsKeyword("foreach"))
             {
-				return ParseForEachExpression();
-			}
-			else if (IsKeyword("repeat"))
+                return ParseForEachExpression();
+            }
+            else if (IsKeyword("repeat"))
             {
                 return ParseRepeatExpression();
             }
@@ -1162,10 +1242,6 @@ namespace FriedLanguage
             {
                 return ParseWhileExpression();
             }
-            //else if (IsKeyword("func"))
-            //{
-            //    return ParseFunctionExpression();
-            //}
             else if (IsKeyword("throw"))
             {
                 return ParseThrowExpression();
@@ -1181,7 +1257,7 @@ namespace FriedLanguage
             }
             else
             {
-                throw MakeException($"Unexpected token {Current.Type} at pos {Current.Position} in atom expression!");
+                throw MakeException($"Unexpected token {Current.Type} at pos {Current.Position} with text {Current.Text} in atom expression!");
             }
         }
 

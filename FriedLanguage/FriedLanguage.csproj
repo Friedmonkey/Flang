@@ -112,6 +112,8 @@
     <Compile Include="Models\Parsing\Nodes\BlockNode.cs" />
     <Compile Include="Models\Parsing\Nodes\CsLiteral.cs" />
     <Compile Include="Models\Parsing\Nodes\InitExplicitVariableNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\DoubleLiteralNode.cs" />
+    <Compile Include="Models\Parsing\Nodes\LongLiteralNode.cs" />
     <Compile Include="Models\Parsing\Nodes\UnmatchNode.cs" />
     <Compile Include="Models\Parsing\Nodes\BreakNode.cs" />
     <Compile Include="Models\Parsing\Nodes\CallNode.cs" />

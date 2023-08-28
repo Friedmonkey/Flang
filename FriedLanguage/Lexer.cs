@@ -266,9 +266,15 @@ namespace FriedLanguage
                     }
                     else if (Current == '"')
                     {
-                        tokens.Add(ParseString());
+                        SyntaxToken? token = ParseString();
+                        if (token is null) 
+                        {
+                            
+                        }
+                        else
+                            tokens.Add((SyntaxToken)token);
                     }
-                    else if (char.IsLetter(Current))
+                    else if (char.IsLetter(Current) || Current == '@' || Current == '_')
                     {
                         tokens.Add(ParseIdentifierOrKeywordOrLogical());
                     }
@@ -337,7 +343,7 @@ namespace FriedLanguage
             string str = "";
             int startPos = Position;
 
-            while (Current != '\0' && Current != ' ' && (char.IsLetterOrDigit(Current) || Current == '_'))
+            while (Current != '\0' && Current != ' ' && (char.IsLetterOrDigit(Current) || Current == '@' || Current == '_'))
             {
                 str += Current;
                 Position++;
@@ -351,7 +357,7 @@ namespace FriedLanguage
         }
 
 
-        private SyntaxToken ParseString()
+        private SyntaxToken? ParseString()
         {
             string str = "";
             int startPos = Position;
@@ -383,11 +389,17 @@ namespace FriedLanguage
 
             Position++;
 
-#warning identifier is here
             if (Current == 'i')
             {
                 Position++;
                 return new(SyntaxType.Identifier, startPos, str, str);
+            }
+            else if (Current == '$')
+            {
+                Position++;
+                ParseVarString(new(SyntaxType.String, startPos, str, str));
+                return null;
+                //return new(SyntaxType.VarString, startPos, str, str);
             }
             else
             {
@@ -395,14 +407,120 @@ namespace FriedLanguage
             }
         }
 
+        private void ParseVarString(SyntaxToken token) 
+        {
+
+            string str = token.Text;
+
+
+            List<string> arguments = new List<string>();
+            string final = string.Empty;
+
+            int length = 1; //the opening "
+
+            string argument = string.Empty;
+            bool Inside = false;
+            int count = 0;
+            for (int i = 0; i < str.Length; i++) 
+            {
+                char c = str[i];
+                if (c is '"' or '\n' or '\\' or '\0')
+                {
+                    string real = string.Empty;
+                    switch (c)
+                    {
+                        case '"':  real = "\""; break;
+                        case '\n': real = "n";  break;
+                        case '\\': real = "\\"; break;
+                        case '\0': real = "0";  break;
+                        //default: throw new Exception("Invalid escape sequence");
+                    }
+                    if (Inside)
+                        argument += real; //dont escape it?
+                    else
+                        final += "\\"+real; //escape it
+                    length++;
+                    continue;
+                }
+                if (Inside)
+                {
+                    if (c == '}')
+                    {
+                        final += count;
+                        count++;
+                        final+= '}';
+                        Inside = false;
+
+                        arguments.Add(argument);
+                        argument = string.Empty;
+                    }
+                    else
+                    {
+                        argument+= c;
+                        continue;
+                    }
+                }
+                else
+                {
+                    final += c;
+                }
+
+                if (c == '{')
+                {
+                    Inside = true;
+                }
+
+            }
+
+            length += 2; //the closing " and the $ 
+
+            string cs = string.Empty;
+            cs += "FlangFormat";
+            cs += "(";
+                cs += '"';
+                    cs += final;
+                cs += '"';
+            cs += ",";
+                cs += "[";
+                    cs += string.Join(",",arguments);
+                cs += "]";
+            cs += ")";
+
+            Code = Code.Remove(token.Position,token.Text.Length+length); //left and right " plus the $ on the end
+            Code = Code.Insert(token.Position, cs);
+            Position = token.Position;
+
+
+            //var tokens = new List<SyntaxToken>();
+            //tokens.Add(new SyntaxToken(SyntaxType.Identifier, pos, "FlangFormat", "FlangFormat"));
+            //tokens.Add(new SyntaxToken(SyntaxType.LParen, pos, null, "("));
+            //tokens.Add(new SyntaxToken(SyntaxType.String, pos, final, final));
+            //tokens.Add(new SyntaxToken(SyntaxType.Comma, pos, null, ","));
+            //tokens.Add(new SyntaxToken(SyntaxType.LSqBracket, pos, null, "["));
+            //foreach (string arg in arguments) 
+            //{
+            //    tokens.Add(new SyntaxToken(SyntaxType.Identifier, pos, arg, arg));
+            //}
+            //tokens.Add(new SyntaxToken(SyntaxType.RSqBracket, pos, null, "]"));
+            //tokens.Add(new SyntaxToken(SyntaxType.RParen, pos, null, ")"));
+            //
+            //return tokens;
+        }
+
+
         private SyntaxToken ParseNumber()
         {
             string numStr = "";
             bool isDecimal = false;
             int startPos = Position;
 
-            while ((char.IsDigit(Current) || Current == '.') && Current != '\0')
+            while ((char.IsDigit(Current) || Current == '.' || Current == '_') && Current != '\0')
             {
+                if (Current == '_') 
+                {
+                    Position++;
+                    continue;
+                }
                 numStr += Current;
 
                 if (Current == '.')
@@ -413,6 +531,61 @@ namespace FriedLanguage
                 Position++;
             }
 
+            char typeSpecifier = Char.ToLower(Current); // Capture the character after the number
+            if (typeSpecifier is 'i' or 'l' or 'f' or 'd')
+            {
+                Position++; // Move to the next character after the specifier
+                if (isDecimal)
+                {
+                    if (typeSpecifier is 'i' or 'l')
+                    {
+                        throw new Exception("Invalid number (tried to parse " + numStr + " as whole number)");
+                    }
+                    else if (typeSpecifier is 'f')
+                    {
+                        if (!float.TryParse(numStr, NumberStyles.Float, CultureInfo.InvariantCulture, out float floatVal)) throw new Exception("Invalid number (tried to parse " + numStr + " as float)");
+                        return new(SyntaxType.Float, startPos, floatVal, numStr);
+                    }
+                    else if (typeSpecifier is 'd')
+                    {
+                        if (!double.TryParse(numStr, NumberStyles.Float, CultureInfo.InvariantCulture, out double floatVal)) throw new Exception("Invalid number (tried to parse " + numStr + " as double)");
+                        return new(SyntaxType.Double, startPos, floatVal, numStr);
+                    }
+                    else
+                    {
+                        throw new Exception("Unknow type specifier on number");
+                    }
+                }
+                else
+                {
+                    if (typeSpecifier is 'i')
+                    {
+                        if (!int.TryParse(numStr, out int intVal)) throw new Exception("Invalid number (tried to parse " + numStr + " as int)");
+                        return new(SyntaxType.Int, startPos, intVal, numStr);
+                    }
+                    else if (typeSpecifier is 'l')
+                    {
+                        if (!long.TryParse(numStr, out long longVal)) throw new Exception("Invalid number (tried to parse " + numStr + " as long)");
+                        return new(SyntaxType.Long, startPos, longVal, numStr);
+                    }
+                    else if (typeSpecifier is 'f')
+                    {
+                        if (!float.TryParse(numStr, NumberStyles.Float, CultureInfo.InvariantCulture, out float floatVal)) throw new Exception("Invalid number (tried to parse " + numStr + " as float)");
+                        return new(SyntaxType.Float, startPos, floatVal, numStr);
+                    }
+                    else if (typeSpecifier is 'd')
+                    {
+                        if (!double.TryParse(numStr, NumberStyles.Float, CultureInfo.InvariantCulture, out double doubleVal)) throw new Exception("Invalid number (tried to parse " + numStr + " as double)");
+                        return new(SyntaxType.Double, startPos, doubleVal, numStr);
+                    }
+                    else
+                    {
+                        throw new Exception("Unknow type specifier on number");
+                    }
+                }
+
+            }
+
             if (isDecimal)
             {
                 if (!float.TryParse(numStr, NumberStyles.Float, CultureInfo.InvariantCulture, out float floatVal)) throw new Exception("Invalid number (tried to parse " + numStr + " as float)");
@@ -420,7 +593,7 @@ namespace FriedLanguage
             }
             else
             {
-                if (!int.TryParse(numStr, out int intVal)) throw new Exception("Invalid number!");
+                if (!int.TryParse(numStr, out int intVal)) throw new Exception("Invalid number (tried to parse " + numStr + " as int)");
                 return new(SyntaxType.Int, startPos, intVal, numStr);
             }
         }

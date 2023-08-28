@@ -57,26 +57,35 @@ namespace FriedLanguageConsole
     //{
     //	prop static empty = "";
     //}
-            //import native io;
-            //import native lang;
+    //import native io;
+    //import native lang;
 
-            //class person
-            //{
-            //    string name = "";
-            //    person(nam)
-            //    {
-            //        var name = "lol"; 
-            //        self.name = nam;
-            //    }
-            //    void hello()
-            //    {
-            //        print("Hello my name is "+self.name);
-            //    }
-            //}
+    //class person
+    //{
+    //    string name = "";
+    //    person(nam)
+    //    {
+    //        var name = "lol"; 
+    //        self.name = nam;
+    //    }
+    //    void hello()
+    //    {
+    //        print("Hello my name is "+self.name);
+    //    }
+    //}
 
-            //var p = new person("jhonn");
-            //p.hello();
-            //return p;
+    //var p = new person("jhonn");
+    //p.hello();
+    //return p;
+
+    //import native io;
+
+    //        print("what is your first name?");
+    //string fname = read();
+    //print("what is your last name?");
+    //string lname = read();
+    //print("Hello {fname+\" \\n \"+lname}"$);
+
     ///switch case
     ///goto statement
     //dll import/interopt?
@@ -96,40 +105,14 @@ namespace FriedLanguageConsole
             FLang fLang = new FLang();
 			fLang.ImportNative<IO>("io");
 			fLang.ImportNative<Lang>("lang");
-			//fLang.ImportNative<Popups>("pop");
-			//fLang.ImportNative<Async>("async");
 
 			fLang.AddVariable("pi",Math.PI);
-            //fLang.AddMethod(new FlangMethod("printNormal",IO.Global.Print,"msg"));
 
             //MessageBox.Show("hi","popup",MessageBoxButtons.YesNoCancel,MessageBoxIcon.None);
             string code = """
-            import native io;
-            import native lang;
-
-            class printer
-            {
-                const string message;
-                printer(string msg)
-                {
-                    self.message = msg;
-                }
-            }
-
-            class extend printer
-            {
-                void print(classinstance this)
-                {
-                    print(this.message);
-                }
-            }
-
-
-            var p = new printer("hi :3");
-            //p.message = "lolllll";
-            var a = p.print();
-            //return a;
-
+            
+            long a = 32_000_000_000L;
+            return a;
 """;
 
 

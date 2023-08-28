@@ -42,7 +42,7 @@ namespace FriedLanguage.BuiltinType
 
             for (int i = 0; i < ExpectedArgs.Count; i++)
             {
-                if (args[i].BuiltinName.ToString().ToLower() != ExpectedArgTypes[i])
+                if (!((args[i].BuiltinName.ToString().ToLower() == ExpectedArgTypes[i]) || ExpectedArgTypes[i] == "object"))
                     throw new Exception($"Expected {ExpectedArgTypes[i]} for {ExpectedArgs[i]} got {args[i].BuiltinName.ToString().ToLower()}");
                 funcScope.Set(ExpectedArgs[i], args[i]);
             }

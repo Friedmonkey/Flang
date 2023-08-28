@@ -92,6 +92,7 @@
     <Compile Include="NativeLibraries\Lang\Int.cs" />
     <Compile Include="NativeLibraries\Lang\Dict.cs" />
     <Compile Include="NativeLibraries\Lang\List.cs" />
+    <Compile Include="NativeLibraries\Lang\DateTime.cs" />
     <Compile Include="NativeLibraries\Lang\String.cs" />
     <Compile Include="NativeLibraries\Popup\Inject.cs" />
     <Compile Include="NativeLibraries\Popup\Popup.cs" />

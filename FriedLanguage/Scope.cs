@@ -24,8 +24,9 @@ namespace FriedLanguage
         public Dictionary<string, KeyValuePair<FValue,bool>> ExportTable { get; set; } = new();
         public Scope ParentScope { get; set; }
 
-		//public List<(string name, int pos)> Labels = new();
+        //public List<(string name, int pos)> Labels = new();
 
+        public string nowVar = "tnow";
 		public int JumpTo = -1;
 		public int JumpToIfCreatedPosition = -1;
 		public int BreakAmount = -1;
@@ -79,6 +80,8 @@ namespace FriedLanguage
 
         public FValue Get(string key)
         {
+            if (key == nowVar)
+                return new FLong(DateTime.Now.Ticks);
             if (Table.TryGetValue(key, out FValue val)) return val;
 
             if (ParentScope == null) return null;
