@@ -11,13 +11,17 @@ namespace FriedLanguage.Models.Parsing.Nodes
     {
         private SyntaxToken name;
         private List<SyntaxToken> args;
+        private List<SyntaxToken> argTypes;
+        private SyntaxToken returnType;
         private SyntaxNode body;
         private bool isStatic;
 
-        public ClassFunctionDefinitionNode(SyntaxToken name, List<SyntaxToken> args, SyntaxNode body, bool isStatic) : base(name.Position, body.EndPosition)
+        public ClassFunctionDefinitionNode(SyntaxToken name, List<SyntaxToken> args, List<SyntaxToken> argTypes,SyntaxToken returnType, SyntaxNode body, bool isStatic) : base(name.Position, body.EndPosition)
         {
             this.name = name;
             this.args = args;
+            this.argTypes = argTypes;
+            this.returnType = returnType;
             this.body = body;
             this.isStatic = isStatic;
         }
@@ -37,7 +41,7 @@ namespace FriedLanguage.Models.Parsing.Nodes
                 targetName = "$$" + targetName;
             }
 
-            var f = new FFunction(scope, targetName, args.Select((v) => v.Text).ToList(), body);
+            var f = new FFunction(scope, targetName, args.Select((v) => v.Text).ToList(), argTypes.Select((v) => v.Text).ToList(),returnType.Text, body);
             f.IsClassInstanceMethod = !isStatic;
             return f;
         }

@@ -21,6 +21,12 @@ namespace FriedLanguage.Models
             Value = val;
             Text = txt;
         }
+        public SyntaxToken(SyntaxType type,object val,string text = "")
+        {
+            Type = type;
+            Value = val;
+            Text = text;
+        }
         public SyntaxToken(SyntaxToken Source)
         {
             Type = Source.Type;

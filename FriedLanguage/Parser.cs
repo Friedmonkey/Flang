@@ -465,14 +465,14 @@ namespace FriedLanguage
                         Position++;
                         var expr = ParseExpression();
 
-                        nodes.Add(new ClassPropDefinitionNode(ident, expr, isStatic));
+                        nodes.Add(new ClassPropDefinitionNode(ident,varType, expr, isStatic, fixedType, isConst, isNullable));
 
                         //return new InitExplicitVariableNode(ident, varType, expr, fixedType, isConst, isNullable);
                     }
                     else
                     {
-                        throw new Exception("Needs to be initazlized... for now.....");
-                        //nodes.Add(new ClassPropDefinitionNode(ident, expr, isStatic));
+                        //throw new Exception("Needs to be initazlized... for now.....");
+                        nodes.Add(new ClassPropDefinitionNode(ident,varType, null, isStatic, fixedType, isConst, isNullable));
                         //return new InitExplicitVariableNode(ident, varType, fixedType, isConst, isNullable);
                     }
 
@@ -501,10 +501,12 @@ namespace FriedLanguage
                     }
                     var name = MatchToken(SyntaxType.Identifier);
                     name.Text = "ctor";
-                    var args = ParseFunctionArgs();
+                    (var args, var types) = ParseFunctionArgs();
                     var body = ParseScopedStatements();
-
-                    nodes.Add(new ClassFunctionDefinitionNode(name, args, body, false)); //never static
+                    SyntaxToken returnType = new SyntaxToken();
+                    returnType.Text = "void";
+                    returnType.Type = SyntaxType.Identifier;
+                    nodes.Add(new ClassFunctionDefinitionNode(name, args,types,returnType, body, false)); //never static
                 }
                 else if (Peek(1).Type == SyntaxType.Identifier && Peek(2).Type == SyntaxType.LParen) //function
                 {
@@ -532,10 +534,10 @@ namespace FriedLanguage
                     Position++;
 
                     var name = MatchToken(SyntaxType.Identifier);
-                    var args = ParseFunctionArgs();
+                    (var args, var types) = ParseFunctionArgs();
                     var body = ParseScopedStatements();
 
-                    nodes.Add(new ClassFunctionDefinitionNode(name, args, body, false)); //never static
+                    nodes.Add(new ClassFunctionDefinitionNode(name, args, types, returnType, body, isStatic)); //never static
                 }
                 else
                 {
@@ -682,11 +684,19 @@ namespace FriedLanguage
                     Current.Text == "long" ||
                     Current.Text == "object" ||
                     Current.Text == "list" ||
-                    Current.Text == "dictionary"
+                    Current.Text == "dictionary" ||
+                    Current.Text == "void"
                 ) && Peek(1).Type == SyntaxType.Identifier
                 )
             {
-                return ParseExplicitVariableDefinition();
+                if (Peek(2).Type == SyntaxType.LParen)
+                {
+                    return ParseExplicitFunctionDefinition();
+                }
+                else
+                { 
+                    return ParseExplicitVariableDefinition();
+                }
             }
             if (Current.Type == SyntaxType.Identifier && Peek(1).Type == SyntaxType.Equals)
 			{
@@ -835,7 +845,7 @@ namespace FriedLanguage
                     Position++;
                     break;
                 default:
-                    throw new Exception("idk man wrong shit");
+                    throw new Exception(Current.Text+" is not a valid type for a varible");
             }
             var varType = Peek(-1);
 
@@ -866,7 +876,37 @@ namespace FriedLanguage
                 return new InitExplicitVariableNode(ident, varType, fixedType, isConst, isNullable);
             }
         }
+        public SyntaxNode ParseExplicitFunctionDefinition()
+        {
+            bool isStatic = false, isConst = false;
+            if (Peek(-1).Text == "const")
+            {
+                isConst = true;
+                //static const STRING
+                if (Peek(-2).Text == "static")
+                {
+                    isStatic = true;
+                }
+            }
+            //static STRING
+            else if (Peek(-1).Text == "static")
+            {
+                isStatic = true;
+            }
+            if (isConst)
+            {
+                throw new Exception("a Function cannot be marked with const");
+            }
 
+            var returnType = Current;
+            Position++;
+
+            var name = MatchToken(SyntaxType.Identifier);
+            (var args,var types) = ParseFunctionArgs();
+            var body = ParseScopedStatements();
+
+            return new FunctionDefinitionNode(name, args, types, returnType, body, false); //never static
+        }
         //parse comparision expression  
         public SyntaxNode ParseCompExpression()
         {
@@ -1122,10 +1162,10 @@ namespace FriedLanguage
             {
                 return ParseWhileExpression();
             }
-            else if (IsKeyword("func"))
-            {
-                return ParseFunctionExpression();
-            }
+            //else if (IsKeyword("func"))
+            //{
+            //    return ParseFunctionExpression();
+            //}
             else if (IsKeyword("throw"))
             {
                 return ParseThrowExpression();
@@ -1452,40 +1492,40 @@ namespace FriedLanguage
             return new WhileNode(condNode, block);
         }
 
-        public SyntaxNode ParseFunctionExpression()
-        {
-            MatchKeyword("func");
+        //public SyntaxNode ParseFunctionExpression()
+        //{
+        //    MatchKeyword("func");
 
-            bool @override = false;
+        //    bool @override = false;
 
-            SyntaxToken? nameToken = null;
+        //    SyntaxToken? nameToken = null;
 
-            if (IsKeyword("override"))
-            {
-                Position++;
-                @override = true;
-            }
+        //    if (IsKeyword("override"))
+        //    {
+        //        Position++;
+        //        @override = true;
+        //    }
 
-            if (Current.Type == SyntaxType.Identifier)
-                nameToken = MatchToken(SyntaxType.Identifier);
+        //    if (Current.Type == SyntaxType.Identifier)
+        //        nameToken = MatchToken(SyntaxType.Identifier);
 
-            var args = ParseFunctionArgs();
+        //    (var args, var types) = ParseFunctionArgs();
 
-            SyntaxNode block;
+        //    SyntaxNode block;
 
-            if (Current.Type == SyntaxType.LBraces)
-            {
-                block = ParseScopedStatements();
-            }
-            else
-            {
-                var arrow = MatchToken(SyntaxType.Arrow);
-                block = ParseScopedOrStatement();
-                block = new ReturnNode(arrow, block);
-            }
+        //    if (Current.Type == SyntaxType.LBraces)
+        //    {
+        //        block = ParseScopedStatements();
+        //    }
+        //    else
+        //    {
+        //        var arrow = MatchToken(SyntaxType.Arrow);
+        //        block = ParseScopedOrStatement();
+        //        block = new ReturnNode(arrow, block);
+        //    }
 
-            return new FunctionDefinitionNode(nameToken, args, block,@override);
-        }
+        //    return new FunctionDefinitionNode(nameToken, args, types, returnType, block,@override);
+        //}
         public SyntaxNode ParseThrowExpression()
         {
             MatchKeyword("throw");
@@ -1528,11 +1568,12 @@ namespace FriedLanguage
             return new InstantiateNode(ident, argumentNodes);
         }
 
-        public List<SyntaxToken> ParseFunctionArgs()
+        public (List<SyntaxToken>, List<SyntaxToken>) ParseFunctionArgs()
         {
             MatchToken(SyntaxType.LParen);
 
             List<SyntaxToken> args = new();
+            List<SyntaxToken> types = new();
 
 
             if (Current.Type == SyntaxType.RParen)
@@ -1541,20 +1582,24 @@ namespace FriedLanguage
             }
             else
             {
+                var type = MatchToken(SyntaxType.Identifier);
                 var ident = MatchToken(SyntaxType.Identifier);
+                types.Add(type);
                 args.Add(ident);
 
                 while (Current.Type == SyntaxType.Comma)
                 {
                     Position++;
+                    type = MatchToken(SyntaxType.Identifier);
                     ident = MatchToken(SyntaxType.Identifier);
+                    types.Add(type);
                     args.Add(ident);
                 }
 
                 MatchToken(SyntaxType.RParen);
             }
 
-            return args;
+            return (args,types);
         }
 
         public SyntaxNode BinaryOperation(Func<SyntaxNode> leftParse, List<SyntaxType> allowedTypes, Func<SyntaxNode> rightParse = null)

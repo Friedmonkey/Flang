@@ -105,49 +105,31 @@ namespace FriedLanguageConsole
             //MessageBox.Show("hi","popup",MessageBoxButtons.YesNoCancel,MessageBoxIcon.None);
             string code = """
             import native io;
-            //import native pop;
+            import native lang;
 
-            class popup
+            class printer
             {
-                string message = "";
-                string title = "popup";
-                string buttonType = "YesNoCancel";
-                string iconType = "None";
-                popup(msg)
+                const string message;
+                printer(string msg)
                 {
                     self.message = msg;
                 }
-                string show()
+            }
+
+            class extend printer
+            {
+                void print(classinstance this)
                 {
-                    string str = "Nothing";
-                    <{
-                        if (Enum.TryParse(context.getSelfStr("buttonType"), true, out MessageBoxButtons btype))
-                        {
-                            if (Enum.TryParse(context.getSelfStr("iconType"), true, out MessageBoxIcon itype))
-                            {
-                                var result = MessageBox.Show(context.getSelfStr("message"),context.getSelfStr("title"),btype,itype);
-                                context.setStr("str",result.ToString());
-                            }
-                        }
-                    }>
-                    return str;
+                    print(this.message);
                 }
             }
-            
-            var p = new popup("Do you want to date me?");
-            p.type = "Ok";
-            p.title = "importand";
-            p.buttonType = "YesNo";
-            p.iconType = "Warning";
-            var result = p.show();
-            if (result == "Yes")
-            {
-                print("yayyyy :3");
-            }
-            else
-            {
-                print(":(");
-            }
+
+
+            var p = new printer("hi :3");
+            //p.message = "lolllll";
+            var a = p.print();
+            //return a;
+
 """;
 
 

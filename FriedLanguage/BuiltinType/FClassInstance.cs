@@ -38,7 +38,10 @@ namespace FriedLanguage.BuiltinType
             var newArgs = new List<FValue> { this };
             newArgs.AddRange(args);
 
+            GlobalState.EnterConstructor();
             ctor.Call(scope, args);
+            GlobalState.ExitConstructor();
+            //scope.ConstructorScope = false;
             this.initialized = true;
 
             if (scope.State != ScopeState.None)
@@ -105,17 +108,19 @@ namespace FriedLanguage.BuiltinType
 #warning commented this out idk why it wss here, prob for good reason
             //if (initialized)
             //{
-                foreach (var kvp in InstanceTable)
-                {
-                    if (kvp.key == keyVal.Value)
-                    {
-                        if (kvp.val.IsConstant) throw new Exception($"Tried to overwrite constant value {kvp.key}!");
+             foreach (var kvp in InstanceTable)
+             {
+                 if (kvp.key == keyVal.Value)
+                 {
+                     if (kvp.val.IsConstant && !GlobalState.IsInConstructor()) throw new Exception($"Tried to overwrite constant value {kvp.key}!");
 
-                        InstanceTable.Remove(kvp);
-                        InstanceTable.Add((keyVal.Value, other));
-                        return other;
-                    }
-                }
+
+                     kvp.val.CopyMeta(ref other);
+                     InstanceTable.Remove(kvp);
+                     InstanceTable.Add((keyVal.Value, other));
+                     return other;
+                 }
+             }
             //}
 
             bool success = SetValue(keyVal.Value,other,scope);

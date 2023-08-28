@@ -39,12 +39,23 @@ namespace FriedLanguage.Models.Parsing.Nodes
                         if (bodyNode is ClassFunctionDefinitionNode cfdn)
                         {
                             var funcRaw = cfdn.Evaluate(scope);
-                            if (funcRaw is not FFunction func) throw new Exception("Expected ClassFunctionDefinitionNode to return SFunction");
+                            if (funcRaw is not FFunction func) throw new Exception("Expected ClassFunctionDefinitionNode to return FFunction");
 
                             if (func.IsClassInstanceMethod)
                             {
-                                if (func.ExpectedArgs.IndexOf("self") == -1) func.ExpectedArgs.Insert(0, "self");
+                                //if (func.ExpectedArgs.IndexOf("self") == -1) 
+                                //    func.ExpectedArgs.Insert(0, "self");
 
+                                if (func.ExpectedArgs.IndexOf("self") == -1)
+                                { 
+                                    func.ExpectedArgs.Insert(0, "self");
+                                    func.ExpectedArgTypes.Insert(0, "classinstance"); //idk?
+                                }
+                                if (func.ExpectedArgs.IndexOf("this") == -1)
+                                {
+                                    func.ExpectedArgs.Insert(0, "this");
+                                    func.ExpectedArgTypes.Insert(0, "classinstance");
+                                }
                                 fclass.InstanceBaseTable.Add((func.FunctionName, func));
                             }
                             else
@@ -54,7 +65,45 @@ namespace FriedLanguage.Models.Parsing.Nodes
                         }
                         else if (bodyNode is ClassPropDefinitionNode cpdn)
                         {
-                            var val = cpdn.Expression.Evaluate(scope);
+                            //var val = cpdn.Expression.Evaluate(scope);
+                            FValue val = FValue.Null;
+                            if (cpdn.Expression is null)
+                            {
+                                switch (cpdn.VarType.Text)
+                                {
+                                    case "string":
+                                        val = new FString("");
+                                        break;
+                                    case "int":
+                                        val = new FInt(0);
+                                        break;
+                                    case "float":
+                                        val = new FFloat(0);
+                                        break;
+                                    case "double":
+                                        val = new FDouble(0);
+                                        break;
+                                    case "long":
+                                        val = new FLong(0);
+                                        break;
+                                    case "bool":
+                                        val = new FBool(false);
+                                        break;
+                                    case "list":
+                                        val = new FList();
+                                        break;
+                                    case "dictionary":
+                                        val = new FDictionary();
+                                        break;
+                                }
+                            }
+                            else
+                                val = cpdn.Expression.Evaluate(scope);
+
+                            val.IsConstant = cpdn.IsConstant;
+                            val.TypeIsFixed = cpdn.FixedType;
+                            val.IsNullable = cpdn.IsNullable;
+
 
                             if (!cpdn.IsStatic)
                             {
@@ -91,7 +140,11 @@ namespace FriedLanguage.Models.Parsing.Nodes
 
                     if (func.IsClassInstanceMethod)
                     {
-                        if (func.ExpectedArgs.IndexOf("self") == -1) func.ExpectedArgs.Insert(0, "self");
+                        if (func.ExpectedArgs.IndexOf("self") == -1)
+                        { 
+                            func.ExpectedArgs.Insert(0, "self");
+                            func.ExpectedArgTypes.Insert(0,"classinstance");
+                        }
 
                         @class.InstanceBaseTable.Add((func.FunctionName, func));
                     }
@@ -102,10 +155,47 @@ namespace FriedLanguage.Models.Parsing.Nodes
                 }
                 else if (bodyNode is ClassPropDefinitionNode cpdn)
                 {
-                    var val = cpdn.Expression.Evaluate(scope);
+                    FValue val = FValue.Null;
+                    if (cpdn.Expression is null)
+                    {
+                        switch (cpdn.VarType.Text)
+                        {
+                            case "string":
+                                val = new FString("");
+                                break;
+                            case "int":
+                                val = new FInt(0);
+                                break;
+                            case "float":
+                                val = new FFloat(0);
+                                break;
+                            case "double":
+                                val = new FDouble(0);
+                                break;
+                            case "long":
+                                val = new FLong(0);
+                                break;
+                            case "bool":
+                                val = new FBool(false);
+                                break;
+                            case "list":
+                                val = new FList();
+                                break;
+                            case "dictionary":
+                                val = new FDictionary();
+                                break;
+                        }
+                    }
+                    else
+                        val = cpdn.Expression.Evaluate(scope);
 
-                    //cpdn.copyMeta(ref val);
-                    val.IsConstant = false;
+                    ////cpdn.copyMeta(ref val);
+                    //val.IsConstant = false;
+
+                    val.IsConstant = cpdn.IsConstant;
+                    val.TypeIsFixed = cpdn.FixedType;
+                    val.IsNullable = cpdn.IsNullable;
+
 
                     if (!cpdn.IsStatic)
                     {

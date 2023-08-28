@@ -12,14 +12,18 @@ namespace FriedLanguage.Models.Parsing.Nodes
     {
         private SyntaxToken? nameToken;
         private List<SyntaxToken> args;
+        private List<SyntaxToken> argTypes;
+        private SyntaxToken returnType;
         private SyntaxNode block;
         private bool isOverride = false;
 
-        public FunctionDefinitionNode(SyntaxToken? nameToken, List<SyntaxToken> args, SyntaxNode block, bool isOverride = false)
+        public FunctionDefinitionNode(SyntaxToken? nameToken, List<SyntaxToken> args, List<SyntaxToken> argTypes,SyntaxToken returnType, SyntaxNode block, bool isOverride = false)
             : base(nameToken != null ? nameToken.Value.Position : args.GetStartingPosition(block.StartPosition), block.EndPosition) // either nametoken start, args start or finally block start
         {
             this.nameToken = nameToken;
             this.args = args;
+            this.argTypes = argTypes;
+            this.returnType = returnType;
             this.block = block;
             this.isOverride = isOverride;
         }
@@ -28,7 +32,7 @@ namespace FriedLanguage.Models.Parsing.Nodes
 
         public override FValue Evaluate(Scope scope)
         {
-            var f = new FFunction(scope, nameToken?.Text ?? "<anonymous>", args.Select((v) => v.Text).ToList(), block);
+            var f = new FFunction(scope, nameToken?.Text ?? "<anonymous>", args.Select((v) => v.Text).ToList(), argTypes.Select((v) => v.Text).ToList(),returnType.Text, block);
             if (nameToken != null)
             { 
                 if (isOverride)

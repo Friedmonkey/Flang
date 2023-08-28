@@ -15,5 +15,12 @@ namespace FriedLanguage.BuiltinType
         public bool IsClassInstanceMethod { get; set; }
 
         public List<string> ExpectedArgs { get; set; }
+        //private List<string> expectedArgTypes { get; set; }
+        public List<string> ExpectedArgTypes { get; set; }
+        //{ 
+        //    get => expectedArgTypes; 
+        //    set => expectedArgTypes = value; 
+        //}
+        public string ReturnType { get; set; }
     }
 }

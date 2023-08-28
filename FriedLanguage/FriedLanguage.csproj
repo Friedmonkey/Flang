@@ -101,6 +101,7 @@
     <Compile Include="BuiltinType\FValue.cs" />
     <Compile Include="Extentions\CoreCope.cs" />
     <Compile Include="Extentions\ListExtensions.cs" />
+    <Compile Include="GlobalState.cs" />
     <Compile Include="Interpreter.cs" />
     <Compile Include="Lexer.cs" />
     <Compile Include="LibMain.cs" />
