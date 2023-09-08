@@ -208,6 +208,8 @@ namespace FriedLanguage.BuiltinType
         {
             switch (other)
             {
+                case FBuiltinType.String:
+                    return new FString(this.Value.ToString());
                 case FBuiltinType.Int:
                     return new FInt((int)Value);
                 case FBuiltinType.Long:

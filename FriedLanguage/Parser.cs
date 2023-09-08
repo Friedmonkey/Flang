@@ -498,10 +498,10 @@ namespace FriedLanguage
                     {
                         throw new Exception("a overload cannot be marked with const");
                     }
-                    //if (!isStatic)
-                    //{
-                    //    throw new Exception("a overload must be marked with static");
-                    //}
+                    if (!isStatic)
+                    {
+                        throw new Exception("a overload must be marked with static");
+                    }
 
                     //MatchKeyword("overload");
                     Position++;

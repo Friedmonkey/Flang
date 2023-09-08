@@ -213,12 +213,16 @@ namespace FriedLanguage.BuiltinType
         {
             switch (other)
             {
+                case FBuiltinType.String:
+                    return new FString(this.Value.ToString());
                 case FBuiltinType.Int:
                     return new FInt(Value);
                 case FBuiltinType.Long:
                     return new FLong(Value);
                 case FBuiltinType.Float:
                     return new FFloat(Value);
+                case FBuiltinType.Double:
+                    return new FDouble(Value);
                 default: throw CastInvalid("native " + other.ToString());
             }
         }

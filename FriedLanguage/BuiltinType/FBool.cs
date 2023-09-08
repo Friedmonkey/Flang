@@ -68,6 +68,8 @@ namespace FriedLanguage.BuiltinType
         {
             switch (other)
             {
+                case FBuiltinType.Bool:
+                    return new FBool(this.Value);
                 case FBuiltinType.Int:
                     return new FInt(Value);
                 case FBuiltinType.String:

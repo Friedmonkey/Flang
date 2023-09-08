@@ -90,6 +90,8 @@ namespace FriedLanguage.BuiltinType
         {
             switch (other)
             {
+                case FBuiltinType.String:
+                    return new FString(this.Value.ToString());
                 case FBuiltinType.Int:
                     if (Int32.TryParse(Value, out int ival))
                         return new FInt(ival);
@@ -101,6 +103,10 @@ namespace FriedLanguage.BuiltinType
                 case FBuiltinType.Long:
                     if (long.TryParse(Value, out long lval))
                         return new FLong(lval);
+                    else break;
+                case FBuiltinType.Double:
+                    if (double.TryParse(Value, out double dval))
+                        return new FDouble(dval);
                     else break;
                 case FBuiltinType.Bool:
                     if (Value == "True")
