@@ -36,6 +36,7 @@ namespace FriedLanguage.Models
 									   //"this" its not an officiel keyword but its used for extending
 
 									   or "memory"
+									   or "csharp"
 
                                        //or "int"
                                        //or "float"

@@ -155,12 +155,22 @@ namespace FriedLanguage
 
         public void EnableKeyword(string keyword) 
         {
+            if (keyword == "csharp")
+            { 
+                GlobalState.AllowCodeGeneration();
+                return;
+            }
             var exists = (DisabledKeywords.Contains(keyword));
             if (exists)
                 DisabledKeywords.Remove(keyword);
         }
         public void DisableKeyword(string keyword)
         {
+            if (keyword == "csharp")
+            {
+                GlobalState.DisallowCodeGeneration();
+                return;
+            }
             var exists = (DisabledKeywords.Contains(keyword));
             if (!exists)
                 DisabledKeywords.Add(keyword);

@@ -56,7 +56,7 @@ namespace FriedLanguage.BuiltinType
 
         public override FString ToSpagString()
         {
-            return new("null");
+            return new("Null");
         }
 
         public override string ToString()

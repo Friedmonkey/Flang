@@ -111,7 +111,19 @@ namespace FriedLanguageConsole
             //MessageBox.Show("hi","popup",MessageBoxButtons.YesNoCancel,MessageBoxIcon.None);
             string code = """
             
-            long a = 32_000_000_000L;
+            code += "void print(string message)";
+            code += "{                         ";
+            code += "    import native io;     ";
+            code += "    print(message);       ";
+            code += "}                         ";
+            code += "import native lang;       ";
+            code += "keyword disable csharp;   ";
+            code += "keyword disable import;   ";
+            code += "keyword disable keyword;  ";
+
+            import native io;
+            var a = read();
+            print("Hello world!");
             return a;
 """;
 
