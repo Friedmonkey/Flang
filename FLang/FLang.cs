@@ -17,6 +17,7 @@ namespace FriedLang
     public class FLang
 	{
 		Interpreter _interpreter;
+        public string LastError = "No error!";
 		public FLang()
 		{
 			_interpreter = new Interpreter();
@@ -292,6 +293,7 @@ namespace FriedLang
 			catch (Exception ex)
 			{
 				Console.WriteLine("Error: " + ex.Message);
+                LastError = ex.Message;
 				return null;
 			}
 		}

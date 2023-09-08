@@ -23,9 +23,20 @@ namespace FriedLanguage.Models.Parsing.Nodes
         public override FValue Evaluate(Scope scope)
         {
             var val = scope.Get(ident.Text);
-            if (val == null) throw new Exception("Can not export value of non-existent identifier");
-
-            scope.GetRoot().ExportTable.Add(ident.Text, new (val,Extend));
+            if (val == null)
+            {
+                if (ident.Text is "scope" or "all" or "self" or "this")
+                {
+                    foreach (var (key,value) in scope.Table)
+                    {
+                        scope.GetRoot().ExportTable.Add(key,new(value,Extend));
+                    }
+                    return FValue.Null;
+                }
+                else
+                    throw new Exception("Can not export value of non-existent identifier");
+            }
+                scope.GetRoot().ExportTable.Add(ident.Text, new (val,Extend));
             return val;
         }
 

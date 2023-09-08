@@ -30,29 +30,29 @@ namespace FriedLanguage.Models.Parsing.Nodes
             switch (operatorToken.Type)
             {
                 case SyntaxType.Plus:
-                    return leftRes.Add(rightRes);
+                    return leftRes.Add(rightRes,scope);
                 case SyntaxType.Minus:
-                    return leftRes.Sub(rightRes);
+                    return leftRes.Sub(rightRes, scope);
                 case SyntaxType.Div:
-                    return leftRes.Div(rightRes);
+                    return leftRes.Div(rightRes, scope);
                 case SyntaxType.Mul:
-                    return leftRes.Mul(rightRes);
+                    return leftRes.Mul(rightRes, scope);
                 case SyntaxType.Mod:
-                    return leftRes.Mod(rightRes);
+                    return leftRes.Mod(rightRes, scope);
                 case SyntaxType.EqualsEquals:
-                    return leftRes.Equals(rightRes, operatorToken);
+                    return leftRes.Equals(rightRes, operatorToken, scope);
                 case SyntaxType.BangEquals:
-                    return leftRes.Equals(rightRes, operatorToken).Not();
+                    return leftRes.Equals(rightRes, operatorToken, scope).Not(scope);
                 case SyntaxType.Idx:
-                    return leftRes.Idx(rightRes);
+                    return leftRes.Idx(rightRes, scope);
                 case SyntaxType.LessThan:
-                    return leftRes.LessThan(rightRes);
+                    return leftRes.LessThan(rightRes, scope);
                 case SyntaxType.LessThanEqu:
-                    return leftRes.LessThanEqu(rightRes);
+                    return leftRes.LessThanEqu(rightRes, scope);
                 case SyntaxType.GreaterThan:
-                    return leftRes.GreaterThan(rightRes);
+                    return leftRes.GreaterThan(rightRes, scope);
                 case SyntaxType.GreaterThanEqu:
-                    return leftRes.GreaterThanEqu(rightRes);
+                    return leftRes.GreaterThanEqu(rightRes, scope);
                 case SyntaxType.AndAnd:
                     return new FInt((leftRes.IsTruthy() && rightRes.IsTruthy()) ? 1 : 0);
                 case SyntaxType.OrOr:

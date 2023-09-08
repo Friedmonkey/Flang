@@ -53,7 +53,7 @@ namespace FriedLanguage.BuiltinType
             return $"<FString Value={Value}>";
         }
 
-        public override FValue Add(FValue other)
+        public override FValue Add(FValue other, Scope scope = null)
         {
             if (other is not FString @string)
             {
@@ -66,13 +66,13 @@ namespace FriedLanguage.BuiltinType
                 return new FString(Value + @string.Value);
         }
 
-        public override FValue Idx(FValue other)
+        public override FValue Idx(FValue other, Scope scope = null)
         {
             if (other is not FInt idx) throw NotSupportedBetween(other, "Add");
             return new FString(Value[idx.Value].ToString());
         }
 
-        public override FValue Equals(FValue other,SyntaxToken callerToken = default)
+        public override FValue Equals(FValue other,SyntaxToken callerToken = default, Scope scope = null)
         {
             if ((callerToken.Text == "is" || callerToken.Text == "is not") && other is FClass fclas)
             {

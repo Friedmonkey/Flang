@@ -194,39 +194,50 @@ namespace FriedLanguage.BuiltinType
             return true;
         }
 
-        public override FValue Add(FValue other)
+        public override FValue Add(FValue other, Scope scope = null)
         {
-            var overload = GetValue("$$op+");
+            var overload = GetValue("$$op+",scope);
             if (overload == null) base.Add(other);
 
-            var ret = overload.Call(new Scope(0), new List<FValue>() { this, this, other }); // TODO: Use proper scope; dont forget to reset state then
+            SyntaxToken cToken = new SyntaxToken(SyntaxType.Keyword, "", "Overload Add");
+
+
+            var ret = overload.Call(scope, new List<FValue>() { this, other },cToken); // TODO: Use proper scope; dont forget to reset state then
             return ret;
         }
 
-        public override FValue Sub(FValue other)
+        public override FValue Sub(FValue other, Scope scope = null)
         {
-            var overload = GetValue("$$op-");
+            var overload = GetValue("$$op-",scope);
             if (overload == null) base.Sub(other);
 
-            var ret = overload.Call(new Scope(0), new List<FValue>() { this, this, other }); // TODO: Use proper scope; dont forget to reset state then
+            SyntaxToken cToken = new SyntaxToken(SyntaxType.Keyword, "", "Overload Subtract");
+
+
+            var ret = overload.Call(scope, new List<FValue>() { this, other },cToken); // TODO: Use proper scope; dont forget to reset state then
             return ret;
         }
 
-        public override FValue Mul(FValue other)
+        public override FValue Mul(FValue other, Scope scope = null)
         {
-            var overload = GetValue("$$op*");
+            var overload = GetValue("$$op*",scope);
             if (overload == null) base.Mul(other);
 
-            var ret = overload.Call(new Scope(0), new List<FValue>() { this, this, other }); // TODO: Use proper scope; dont forget to reset state then
+            SyntaxToken cToken = new SyntaxToken(SyntaxType.Keyword, "", "Overload Multiply");
+
+
+            var ret = overload.Call(scope, new List<FValue>() { this, other },cToken); // TODO: Use proper scope; dont forget to reset state then
             return ret;
         }
 
-        public override FValue Div(FValue other)
+        public override FValue Div(FValue other, Scope scope = null)
         {
-            var overload = GetValue("$$op/");
+            var overload = GetValue("$$op/",scope);
             if (overload == null) base.Div(other);
 
-            var ret = overload.Call(new Scope(0), new List<FValue>() { this, this, other }); // TODO: Use proper scope; dont forget to reset state then
+            SyntaxToken cToken = new SyntaxToken(SyntaxType.Keyword,"","Overload Divide");
+
+            var ret = overload.Call(scope, new List<FValue>() { this, other },cToken); // TODO: Use proper scope; dont forget to reset state then
             return ret;
         }
     }

@@ -43,38 +43,88 @@ namespace FriedLanguage.BuiltinType
             return val;
         }
 
-        public override FValue Add(FValue other)
+        public override FValue Add(FValue other, Scope scope = null)
         {
-            if (other is not FInt otherInt) throw new Exception("Can not perform Add on SInt and " + other.BuiltinName.ToString());
+            if (other is not FInt otherInt)
+            {
+                try
+                {
+                    otherInt = (FInt)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    throw new Exception("Can not perform Add on FInt and " + other.BuiltinName.ToString());
+                }
+            }
 
             return new FInt(Value + otherInt.Value);
         }
 
-        public override FValue Sub(FValue other)
+        public override FValue Sub(FValue other, Scope scope = null)
         {
-            if (other is not FInt otherInt) throw new Exception("Can not perform Sub on SInt and " + other.BuiltinName.ToString());
+            if (other is not FInt otherInt)
+            {
+                try
+                {
+                    otherInt = (FInt)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    throw new Exception("Can not perform Sub on FInt and " + other.BuiltinName.ToString());
+                }
+            }
             return new FInt(Value - otherInt.Value);
         }
 
-        public override FValue Mul(FValue other)
+        public override FValue Mul(FValue other, Scope scope = null)
         {
-            if (other is not FInt otherInt) throw new Exception("Can not perform Mul on SInt and " + other.BuiltinName.ToString());
+            if (other is not FInt otherInt)
+            {
+                try
+                {
+                    otherInt = (FInt)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    throw new Exception("Can not perform Mul on FInt and " + other.BuiltinName.ToString());
+                }
+            }
             return new FInt(Value * otherInt.Value);
         }
 
-        public override FValue Div(FValue other)
+        public override FValue Div(FValue other, Scope scope = null)
         {
-            if (other is not FInt otherInt) throw new Exception("Can not perform Div on SInt and " + other.BuiltinName.ToString());
+            if (other is not FInt otherInt)
+            {
+                try
+                {
+                    otherInt = (FInt)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    throw new Exception("Can not perform Div on FInt and " + other.BuiltinName.ToString());
+                }
+            }
             return new FInt(Value / otherInt.Value);
         }
 
-        public override FValue Mod(FValue other)
+        public override FValue Mod(FValue other, Scope scope = null)
         {
-            if (other is not FInt otherInt) throw new Exception("Can not perform Mod on SInt and " + other.BuiltinName.ToString());
+            if (other is not FInt otherInt)
+            {
+                try
+                {
+                    otherInt = (FInt)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    throw new Exception("Can not perform Mod on FInt and " + other.BuiltinName.ToString());
+                }
+            }
             return new FInt(Value % otherInt.Value);
         }
 
-        public override FValue Equals(FValue other, SyntaxToken callerToken = default)
+        public override FValue Equals(FValue other, SyntaxToken callerToken = default, Scope scope = null)
         {
             if ((callerToken.Text == "is" || callerToken.Text == "is not") && other is FClass fclas)
             {
@@ -88,33 +138,73 @@ namespace FriedLanguage.BuiltinType
             }
         }
 
-        public override FValue LessThan(FValue other)
+        public override FValue LessThan(FValue other, Scope scope = null)
         {
-            if (other is not FInt otherInt) return FBool.False;
+            if (other is not FInt otherInt)
+            {
+                try
+                {
+                    otherInt = (FInt)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    return FBool.False;
+                }
+            }
             return new FBool(Value < otherInt.Value);
         }
 
-        public override FValue LessThanEqu(FValue other)
+        public override FValue LessThanEqu(FValue other, Scope scope = null)
         {
-            if (other is not FInt otherInt) return FBool.False;
+            if (other is not FInt otherInt)
+            {
+                try
+                {
+                    otherInt = (FInt)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    return FBool.False;
+                }
+            }
             return new FBool(Value <= otherInt.Value);
 
         }
 
-        public override FValue GreaterThan(FValue other)
+        public override FValue GreaterThan(FValue other, Scope scope = null)
         {
-            if (other is not FInt otherInt) return FBool.False;
+            if (other is not FInt otherInt)
+            {
+                try
+                {
+                    otherInt = (FInt)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    return FBool.False;
+                }
+            }
             return new FBool(Value > otherInt.Value);
 
         }
 
-        public override FValue GreaterThanEqu(FValue other)
+        public override FValue GreaterThanEqu(FValue other, Scope scope = null)
         {
-            if (other is not FInt otherInt) return FBool.False;
+            if (other is not FInt otherInt)
+            {
+                try
+                {
+                    otherInt = (FInt)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    return FBool.False;
+                }
+            }
             return new FBool(Value >= otherInt.Value);
 
         }
-        public override FValue ArithNot()
+        public override FValue ArithNot(Scope scope = null)
         {
             return new FInt(-Value);
         }
@@ -138,7 +228,7 @@ namespace FriedLanguage.BuiltinType
             return Value == 1;
         }
 
-        public override FValue Not()
+        public override FValue Not(Scope scope = null)
         {
             return ArithNot();
         }

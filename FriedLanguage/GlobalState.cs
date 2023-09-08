@@ -9,6 +9,7 @@ namespace FriedLanguage
     public static class GlobalState
     {
         private static bool isInConstructor = false;
+        private static bool csCodeGeneration = true;
         public static void EnterConstructor()
         { 
             isInConstructor = true;
@@ -20,6 +21,19 @@ namespace FriedLanguage
         public static bool IsInConstructor()
         {
             return isInConstructor;
+        }
+
+        public static void AllowCodeGeneration()
+        {
+            csCodeGeneration = true;
+        }
+        public static void DisallowCodeGeneration()
+        {
+            csCodeGeneration = false;
+        }
+        public static bool IsCodeGenerationAllowed()
+        {
+            return csCodeGeneration;
         }
     }
 }

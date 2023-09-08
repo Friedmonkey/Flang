@@ -23,32 +23,32 @@ namespace FriedLanguage.BuiltinType
         public bool IsNullable { get; set; } = false;
         #endregion
 
-        public virtual FValue Add(FValue other)
+        public virtual FValue Add(FValue other, Scope scope = null)
         {
             throw NotSupportedOn("Add");
         }
 
-        public virtual FValue Sub(FValue other)
+        public virtual FValue Sub(FValue other, Scope scope = null)
         {
             throw NotSupportedOn("Sub");
         }
 
-        public virtual FValue Mul(FValue other)
+        public virtual FValue Mul(FValue other, Scope scope = null)
         {
             throw NotSupportedOn("Mul");
         }
 
-        public virtual FValue Div(FValue other)
+        public virtual FValue Div(FValue other, Scope scope = null)
         {
             throw NotSupportedOn("Div");
         }
 
-        public virtual FValue Mod(FValue other)
+        public virtual FValue Mod(FValue other, Scope scope = null)
         {
             throw NotSupportedOn("Mod");
         }
 
-        public virtual FValue Idx(FValue other)
+        public virtual FValue Idx(FValue other, Scope scope = null)
         {
             throw NotSupportedOn("Idx");
         }
@@ -75,27 +75,27 @@ namespace FriedLanguage.BuiltinType
 
         // TODO: Maybe force equals to be implemented?
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public virtual FValue Equals(FValue other,  SyntaxToken calledToken = default)
+        public virtual FValue Equals(FValue other,  SyntaxToken calledToken = default, Scope scope = null)
         {
             throw NotSupportedOn("Equals");
         }
 
-        public virtual FValue LessThan(FValue other)
+        public virtual FValue LessThan(FValue other, Scope scope = null)
         {
             throw NotSupportedOn("LessThan");
         }
 
-        public virtual FValue LessThanEqu(FValue other)
+        public virtual FValue LessThanEqu(FValue other, Scope scope = null)
         {
             throw NotSupportedOn("LessThanEqu");
         }
 
-        public virtual FValue GreaterThan(FValue other)
+        public virtual FValue GreaterThan(FValue other, Scope scope = null)
         {
             throw NotSupportedOn("GreaterThan");
         }
 
-        public virtual FValue GreaterThanEqu(FValue other)
+        public virtual FValue GreaterThanEqu(FValue other, Scope scope = null)
         {
             throw NotSupportedOn("GreaterThanEqu");
         }
@@ -116,12 +116,12 @@ namespace FriedLanguage.BuiltinType
             return false;
         }
 
-        public virtual FValue Not()
+        public virtual FValue Not(Scope scope = null)
         {
             throw NotSupportedOn("Not");
         }
 
-        public virtual FValue ArithNot()
+        public virtual FValue ArithNot(Scope scope = null)
         {
             throw NotSupportedOn("ArithNot");
         }

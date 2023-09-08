@@ -40,37 +40,87 @@ namespace FriedLanguage.BuiltinType
             return val;
         }
 
-        public override FValue Add(FValue other)
+        public override FValue Add(FValue other, Scope scope = null)
         {
-            if (other is not FFloat otherInt) throw new Exception("Can not perform Add on FFloat and " + other.BuiltinName.ToString());
-            return new FFloat(Value + otherInt.Value);
+            if (other is not FFloat otherFloat)
+            {
+                try
+                {
+                    otherFloat = (FFloat)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    throw new Exception("Can not perform Add on FFloat and " + other.BuiltinName.ToString());
+                }
+            }
+            return new FFloat(Value + otherFloat.Value);
         }
 
-        public override FValue Sub(FValue other)
+        public override FValue Sub(FValue other, Scope scope = null)
         {
-            if (other is not FFloat otherInt) throw new Exception("Can not perform Sub on FFloat and " + other.BuiltinName.ToString());
-            return new FFloat(Value - otherInt.Value);
+            if (other is not FFloat otherFloat)
+            {
+                try
+                {
+                    otherFloat = (FFloat)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    throw new Exception("Can not perform Sub on FFloat and " + other.BuiltinName.ToString());
+                }
+            }
+            return new FFloat(Value - otherFloat.Value);
         }
 
-        public override FValue Mul(FValue other)
+        public override FValue Mul(FValue other, Scope scope = null)
         {
-            if (other is not FFloat otherInt) throw new Exception("Can not perform Mul on FFloat and " + other.BuiltinName.ToString());
-            return new FFloat(Value * otherInt.Value);
+            if (other is not FFloat otherFloat)
+            {
+                try
+                {
+                    otherFloat = (FFloat)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    throw new Exception("Can not perform Mul on FFloat and " + other.BuiltinName.ToString());
+                }
+            }
+            return new FFloat(Value * otherFloat.Value);
         }
 
-        public override FValue Div(FValue other)
+        public override FValue Div(FValue other, Scope scope = null)
         {
-            if (other is not FFloat otherInt) throw new Exception("Can not perform Div on FFloat and " + other.BuiltinName.ToString());
-            return new FFloat(Value / otherInt.Value);
+            if (other is not FFloat otherFloat)
+            {
+                try
+                {
+                    otherFloat = (FFloat)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    throw new Exception("Can not perform Div on FFloat and " + other.BuiltinName.ToString());
+                }
+            }
+            return new FFloat(Value / otherFloat.Value);
         }
 
-        public override FValue Mod(FValue other)
+        public override FValue Mod(FValue other, Scope scope = null)
         {
-            if (other is not FFloat otherInt) throw new Exception("Can not perform Mod on FFloat and " + other.BuiltinName.ToString());
-            return new FFloat(Value % otherInt.Value);
+            if (other is not FFloat otherFloat)
+            {
+                try
+                {
+                    otherFloat = (FFloat)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    throw new Exception("Can not perform Mod on FFloat and " + other.BuiltinName.ToString());
+                }
+            }
+            return new FFloat(Value % otherFloat.Value);
         }
 
-        public override FValue Equals(FValue other, SyntaxToken callerToken = default)
+        public override FValue Equals(FValue other, SyntaxToken callerToken = default, Scope scope = null)
         {
             if ((callerToken.Text == "is" || callerToken.Text == "is not") && other is FClass fclas)
             {
@@ -79,11 +129,80 @@ namespace FriedLanguage.BuiltinType
             }
             else
             { 
-                if (other is not FFloat otherInt) throw new Exception("Can not perform EqualsCheck on FFloat and " + other.BuiltinName.ToString());
-                return new FBool(Value == otherInt.Value);
+                if (other is not FFloat otherFloat) throw new Exception("Can not perform EqualsCheck on FFloat and " + other.BuiltinName.ToString());
+                return new FBool(Value == otherFloat.Value);
             }
         }
-        public override FValue ArithNot()
+
+        public override FValue LessThan(FValue other, Scope scope = null)
+        {
+            if (other is not FFloat otherFloat)
+            {
+                try
+                {
+                    otherFloat = (FFloat)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    return FBool.False;
+                }
+            }
+            return new FBool(Value < otherFloat.Value);
+        }
+
+
+        public override FValue LessThanEqu(FValue other, Scope scope = null)
+        {
+            if (other is not FFloat otherFloat)
+            {
+                try
+                {
+                    otherFloat = (FFloat)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    return FBool.False;
+                }
+            }
+            return new FBool(Value <= otherFloat.Value);
+
+        }
+
+        public override FValue GreaterThan(FValue other, Scope scope = null)
+        {
+            if (other is not FFloat otherFloat)
+            {
+                try
+                {
+                    otherFloat = (FFloat)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    return FBool.False;
+                }
+            }
+            return new FBool(Value > otherFloat.Value);
+
+        }
+
+        public override FValue GreaterThanEqu(FValue other, Scope scope = null)
+        {
+            if (other is not FFloat otherFloat)
+            {
+                try
+                {
+                    otherFloat = (FFloat)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    return FBool.False;
+                }
+            }
+            return new FBool(Value >= otherFloat.Value);
+
+        }
+
+        public override FValue ArithNot(Scope scope = null)
         {
             return new FFloat(-Value);
         }

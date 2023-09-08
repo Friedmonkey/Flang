@@ -404,8 +404,6 @@ namespace FriedLanguage
                 (
                 (
                     (
-                        Current.Text == "static" ||
-                        Current.Text == "const" ||
                         Current.Text == "int" ||
                         Current.Text == "string" ||
                         Current.Text == "bool" ||
@@ -419,6 +417,9 @@ namespace FriedLanguage
 
                     ) && Peek(1).Type == SyntaxType.Identifier
                 ) || Current.Text == className.Text //constructor
+                || IsKeyword("overload")
+                || IsKeyword("static")
+                || IsKeyword("const")
                 )
             {
                 bool hasHadAll = false;
@@ -427,6 +428,7 @@ namespace FriedLanguage
                     Position++;
                 }
             gohere:
+                //varible
                 if (((Peek(2).Type is SyntaxType.Semicolon or SyntaxType.Equals) && Current.Text != "void") || hasHadAll)
                 {
                     bool fixedType = (Current.Text != "object");
@@ -474,6 +476,65 @@ namespace FriedLanguage
                     }
 
 
+                }
+                else if (IsKeyword("overload")) //overload
+                {
+                    bool isStatic = false, isConst = false;
+                    if (Peek(-1).Text == "const")
+                    {
+                        isConst = true;
+                        //static const STRING
+                        if (Peek(-2).Text == "static")
+                        {
+                            isStatic = true;
+                        }
+                    }
+                    //static STRING
+                    else if (Peek(-1).Text == "static")
+                    {
+                        isStatic = true;
+                    }
+                    if (isConst)
+                    {
+                        throw new Exception("a overload cannot be marked with const");
+                    }
+                    //if (!isStatic)
+                    //{
+                    //    throw new Exception("a overload must be marked with static");
+                    //}
+
+                    //MatchKeyword("overload");
+                    Position++;
+
+                    var opTok = Current;
+                    Position++;
+
+
+                    if (opTok.Type is not (SyntaxType.Plus or SyntaxType.Minus or SyntaxType.Mul or SyntaxType.Div or SyntaxType.EqualsEquals
+                        or SyntaxType.LessThan or SyntaxType.LessThanEqu or SyntaxType.GreaterThan or SyntaxType.GreaterThanEqu))
+                    {
+                        throw MakeException("Can not find or override operator of token type " + opTok.Type + " at position " + opTok.Position);
+                    }
+
+                    //var args = ParseFunctionArgs();
+                    //var body = ParseScopedStatements();
+
+                    //nodes.Add(new ClassFunctionDefinitionNode(new(SyntaxType.Identifier, opTok.Position, "$$op" + opTok.Text, "$$op" + opTok.Text), args, body, false));
+
+                    var name = Peek(-2);
+                    name.Text = "$$op"+opTok.Text;
+                    (var args, var types) = ParseFunctionArgs();
+                    var body = ParseScopedStatements();
+                    SyntaxToken returnType = new SyntaxToken();
+                    returnType.Text = "object";
+                    returnType.Type = SyntaxType.Identifier;
+
+
+                    //var name = MatchToken(SyntaxType.Identifier);
+                    //(var args, var types) = ParseFunctionArgs();
+                    //var body = ParseScopedStatements();
+
+                    nodes.Add(new ClassFunctionDefinitionNode(name, args, types, returnType, body, isStatic));
                 }
                 else if (Current.Text == className.Text) //constructor
                 {

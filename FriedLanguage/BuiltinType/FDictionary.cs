@@ -51,7 +51,7 @@ namespace FriedLanguage.BuiltinType
             return $"<FDictionary Value={string.Join(", ", Value)}>";
         }
 
-        public override FValue Idx(FValue other)
+        public override FValue Idx(FValue other, Scope scope = null)
         {
             foreach (var kvp in Value)
             {
@@ -85,7 +85,8 @@ namespace FriedLanguage.BuiltinType
 					return value;
 				}
 			}
-            throw new Exception($"Key \"{index.ToSpagString().Value}\" does not exist within this dictionairy");
+            return FValue.Null;
+            //throw new Exception($"Key \"{index.ToSpagString().Value}\" does not exist within this dictionairy");
 		}
 
 		public override bool IsTruthy()

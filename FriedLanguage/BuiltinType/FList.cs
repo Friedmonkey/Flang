@@ -76,7 +76,7 @@ namespace FriedLanguage.BuiltinType
             return $"<FString Value={string.Join(", ", Value)}>";
         }
 
-        public override FValue Idx(FValue other)
+        public override FValue Idx(FValue other, Scope scope = null)
         {
             if (other is not FInt otherInt) throw new Exception("Can only index SList with integers, got " + other.BuiltinName.ToString());
 
@@ -84,13 +84,13 @@ namespace FriedLanguage.BuiltinType
             return Value[otherInt.Value];
         }
 
-        public override FValue Add(FValue other)
+        public override FValue Add(FValue other, Scope scope = null)
         {
             Value.Add(other);
             return this;
         }
 
-        public override FValue Sub(FValue other)
+        public override FValue Sub(FValue other, Scope scope = null)
         {
             if (other is not FInt otherInt) throw new Exception("Can only index SList with integers, got " + other.BuiltinName.ToString());
 

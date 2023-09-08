@@ -37,37 +37,87 @@ namespace FriedLanguage.BuiltinType
             return val;
         }
 
-        public override FValue Add(FValue other)
+        public override FValue Add(FValue other, Scope scope = null)
         {
-            if (other is not FFloat otherInt) throw new Exception("Can not perform Add on FDouble and " + other.BuiltinName.ToString());
-            return new FDouble(Value + otherInt.Value);
+            if (other is not FDouble otherDouble)
+            {
+                try
+                {
+                    otherDouble = (FDouble)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    throw new Exception("Can not perform Add on FDouble and " + other.BuiltinName.ToString());
+                }
+            }
+            return new FDouble(Value + otherDouble.Value);
         }
 
-        public override FValue Sub(FValue other)
+        public override FValue Sub(FValue other, Scope scope = null)
         {
-            if (other is not FFloat otherInt) throw new Exception("Can not perform Sub on FDouble and " + other.BuiltinName.ToString());
-            return new FDouble(Value - otherInt.Value);
+            if (other is not FDouble otherDouble)
+            {
+                try
+                {
+                    otherDouble = (FDouble)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    throw new Exception("Can not perform Sub on FDouble and " + other.BuiltinName.ToString());
+                }
+            }
+            return new FDouble(Value - otherDouble.Value);
         }
 
-        public override FValue Mul(FValue other)
+        public override FValue Mul(FValue other, Scope scope = null)
         {
-            if (other is not FFloat otherInt) throw new Exception("Can not perform Mul on FDouble and " + other.BuiltinName.ToString());
-            return new FDouble(Value * otherInt.Value);
+            if (other is not FDouble otherDouble)
+            {
+                try
+                {
+                    otherDouble = (FDouble)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    throw new Exception("Can not perform Mul on FDouble and " + other.BuiltinName.ToString());
+                }
+            }
+            return new FDouble(Value * otherDouble.Value);
         }
 
-        public override FValue Div(FValue other)
+        public override FValue Div(FValue other, Scope scope = null)
         {
-            if (other is not FFloat otherInt) throw new Exception("Can not perform Div on FDouble and " + other.BuiltinName.ToString());
-            return new FDouble(Value / otherInt.Value);
+            if (other is not FDouble otherDouble)
+            {
+                try
+                {
+                    otherDouble = (FDouble)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    throw new Exception("Can not perform Div on FDouble and " + other.BuiltinName.ToString());
+                }
+            }
+            return new FDouble(Value / otherDouble.Value);
         }
 
-        public override FValue Mod(FValue other)
+        public override FValue Mod(FValue other, Scope scope = null)
         {
-            if (other is not FFloat otherInt) throw new Exception("Can not perform Mod on FDouble and " + other.BuiltinName.ToString());
-            return new FDouble(Value % otherInt.Value);
+            if (other is not FDouble otherDouble)
+            {
+                try
+                {
+                    otherDouble = (FDouble)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    throw new Exception("Can not perform Mod on FDouble and " + other.BuiltinName.ToString());
+                }
+            }
+            return new FDouble(Value % otherDouble.Value);
         }
 
-        public override FValue Equals(FValue other, SyntaxToken callerToken = default)
+        public override FValue Equals(FValue other, SyntaxToken callerToken = default, Scope scope = null)
         {
             if ((callerToken.Text == "is" || callerToken.Text == "is not") && other is FClass fclas)
             {
@@ -76,11 +126,80 @@ namespace FriedLanguage.BuiltinType
             }
             else
             { 
-                if (other is not FDouble otherInt) throw new Exception("Can not perform EqualsCheck on FDouble and " + other.BuiltinName.ToString());
-                return new FBool(Value == otherInt.Value);
+                if (other is not FDouble otherDouble) throw new Exception("Can not perform EqualsCheck on FDouble and " + other.BuiltinName.ToString());
+                return new FBool(Value == otherDouble.Value);
             }
         }
-        public override FValue ArithNot()
+
+        public override FValue LessThan(FValue other, Scope scope = null)
+        {
+            if (other is not FDouble otherDouble)
+            {
+                try
+                {
+                    otherDouble = (FDouble)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    return FBool.False;
+                }
+            }
+            return new FBool(Value < otherDouble.Value);
+        }
+
+
+        public override FValue LessThanEqu(FValue other, Scope scope = null)
+        {
+            if (other is not FDouble otherDouble)
+            {
+                try
+                {
+                    otherDouble = (FDouble)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    return FBool.False;
+                }
+            }
+            return new FBool(Value <= otherDouble.Value);
+
+        }
+
+        public override FValue GreaterThan(FValue other, Scope scope = null)
+        {
+            if (other is not FDouble otherDouble)
+            {
+                try
+                {
+                    otherDouble = (FDouble)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    return FBool.False;
+                }
+            }
+            return new FBool(Value > otherDouble.Value);
+
+        }
+
+        public override FValue GreaterThanEqu(FValue other, Scope scope = null)
+        {
+            if (other is not FDouble otherDouble)
+            {
+                try
+                {
+                    otherDouble = (FDouble)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    return FBool.False;
+                }
+            }
+            return new FBool(Value >= otherDouble.Value);
+
+        }
+
+        public override FValue ArithNot(Scope scope = null)
         {
             return new FDouble(-Value);
         }

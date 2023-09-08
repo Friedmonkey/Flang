@@ -25,7 +25,7 @@ namespace FriedLanguage.Models
                                        //or "func" 
                                        //or "prop" 
                                        or "var" or "class" 
-                                       or "op" 
+                                       //or "op" 
 
                                        or "static" or "const" 
                                        or "new" 
@@ -35,17 +35,18 @@ namespace FriedLanguage.Models
 			#region  mine
 									   //"this" its not an officiel keyword but its used for extending
 
-									   or "memory" 
+									   or "memory"
 
-									   //or "int"
-									   //or "float"
-									   //or "double"
-									   //or "long"
-									   //or "string"
-									   //or "bool"
-									   //or "object"
-									   //or "list"
-									   //or "dictionary"
+                                       //or "int"
+                                       //or "float"
+                                       //or "double"
+                                       //or "long"
+                                       //or "string"
+                                       //or "bool"
+                                       //or "object"
+                                       //or "list"
+                                       //or "dictionary"
+                                       or "overload" 
 
                                        or "extend"
                                        
@@ -78,24 +79,31 @@ namespace FriedLanguage.Models
             {
                 case "becomes":
                     token.Type = SyntaxType.Equals;
+                    Console.WriteLine("ClassifyIdentifierAsLogical matched becomes");
                     break;
                 case "is":
                     token.Type = SyntaxType.EqualsEquals;
+                    Console.WriteLine("ClassifyIdentifierAsLogical matched is");
                     break;
                 case "or":
                     token.Type = SyntaxType.OrOr;
+                    Console.WriteLine("ClassifyIdentifierAsLogical matched or");
                     break;
                 case "and":
                     token.Type = SyntaxType.AndAnd;
+                    Console.WriteLine("ClassifyIdentifierAsLogical matched and");
                     break;
                 case "not":
                     token.Type = SyntaxType.Bang;
+                    Console.WriteLine("ClassifyIdentifierAsLogical matched not");
                     break;
                 case "then":
                     token.Type = SyntaxType.LBraces;
+                    Console.WriteLine("ClassifyIdentifierAsLogical matched then");
                     break;
                 case "stop":
                     token.Type = SyntaxType.RBraces;
+                    Console.WriteLine("ClassifyIdentifierAsLogical matched stop");
                     break;
                 default:
                     break;

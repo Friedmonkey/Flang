@@ -34,8 +34,12 @@ namespace FriedLanguage.Models.Parsing.Nodes
             //        scope.Set(start.Value.Text, f);
             //}
             //return f;
-
-
+            if (!GlobalState.IsCodeGenerationAllowed())
+            {
+                throw new Exception("CS Code generation is not allowed in this context.");
+                //Console.WriteLine("Code generation is not allowed!");
+                return FValue.Null;
+            }
             ///
             /// 
             ///

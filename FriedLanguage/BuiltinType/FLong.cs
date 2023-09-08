@@ -42,37 +42,87 @@ namespace FriedLanguage.BuiltinType
             return val;
         }
 
-        public override FValue Add(FValue other)
+        public override FValue Add(FValue other, Scope scope = null)
         {
-            if (other is not FLong otherLong) throw new Exception("Can not perform Add on FLong and " + other.BuiltinName.ToString());
+            if (other is not FLong otherLong)
+            {
+                try
+                {
+                    otherLong = (FLong)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    throw new Exception("Can not perform Add on FLong and " + other.BuiltinName.ToString());
+                }
+            }
             return new FLong(Value + otherLong.Value);
         }
 
-        public override FValue Sub(FValue other)
+        public override FValue Sub(FValue other, Scope scope = null)
         {
-            if (other is not FLong otherLong) throw new Exception("Can not perform Sub on FLong and " + other.BuiltinName.ToString());
+            if (other is not FLong otherLong)
+            {
+                try
+                {
+                    otherLong = (FLong)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    throw new Exception("Can not perform Sub on FLong and " + other.BuiltinName.ToString());
+                }
+            }
             return new FLong(Value - otherLong.Value);
         }
 
-        public override FValue Mul(FValue other)
+        public override FValue Mul(FValue other, Scope scope = null)
         {
-            if (other is not FLong otherLong) throw new Exception("Can not perform Mul FLong and " + other.BuiltinName.ToString());
+            if (other is not FLong otherLong)
+            {
+                try
+                {
+                    otherLong = (FLong)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    throw new Exception("Can not perform Mul FLong and " + other.BuiltinName.ToString());
+                }
+            }
             return new FLong(Value * otherLong.Value);
         }
 
-        public override FValue Div(FValue other)
+        public override FValue Div(FValue other, Scope scope = null)
         {
-            if (other is not FLong otherLong) throw new Exception("Can not perform Div FLong and " + other.BuiltinName.ToString());
+            if (other is not FLong otherLong)
+            {
+                try
+                {
+                    otherLong = (FLong)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    throw new Exception("Can not perform Div FLong and " + other.BuiltinName.ToString());
+                }
+            }
             return new FLong(Value / otherLong.Value);
         }
 
-        public override FValue Mod(FValue other)
+        public override FValue Mod(FValue other, Scope scope = null)
         {
-            if (other is not FLong otherLong) throw new Exception("Can not perform Mod FLong and " + other.BuiltinName.ToString());
+            if (other is not FLong otherLong)
+            {
+                try
+                {
+                    otherLong = (FLong)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    throw new Exception("Can not perform Mod FLong and " + other.BuiltinName.ToString());
+                }
+            }
             return new FLong(Value % otherLong.Value);
         }
 
-        public override FValue Equals(FValue other, SyntaxToken callerToken = default)
+        public override FValue Equals(FValue other, SyntaxToken callerToken = default, Scope scope = null)
         {
             if ((callerToken.Text == "is" || callerToken.Text == "is not") && other is FClass fclas)
             {
@@ -86,32 +136,72 @@ namespace FriedLanguage.BuiltinType
             }
         }
 
-        public override FValue LessThan(FValue other)
+        public override FValue LessThan(FValue other, Scope scope = null)
         {
-            if (other is not FLong otherLong) return FBool.False;
+            if (other is not FLong otherLong)
+            {
+                try
+                {
+                    otherLong = (FLong)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    return FBool.False;
+                }
+            }
             return new FBool(Value < otherLong.Value);
         }
 
-        public override FValue LessThanEqu(FValue other)
+        public override FValue LessThanEqu(FValue other, Scope scope = null)
         {
-            if (other is not FLong otherLong) return FBool.False;
+            if (other is not FLong otherLong)
+            {
+                try
+                {
+                    otherLong = (FLong)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    return FBool.False;
+                }
+            }
             return new FBool(Value <= otherLong.Value);
 
         }
 
-        public override FValue GreaterThan(FValue other)
+        public override FValue GreaterThan(FValue other, Scope scope = null)
         {
-            if (other is not FLong otherLong) return FBool.False;
+            if (other is not FLong otherLong)
+            {
+                try
+                {
+                    otherLong = (FLong)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    return FBool.False;
+                }
+            }
             return new FBool(Value > otherLong.Value);
         }
 
-        public override FValue GreaterThanEqu(FValue other)
+        public override FValue GreaterThanEqu(FValue other, Scope scope = null)
         {
-            if (other is not FLong otherLong) return FBool.False;
+            if (other is not FLong otherLong)
+            {
+                try
+                {
+                    otherLong = (FLong)other.CastToBuiltin(BuiltinName);
+                }
+                catch
+                {
+                    return FBool.False;
+                }
+            }
             return new FBool(Value >= otherLong.Value);
         }
 
-        public override FValue ArithNot()
+        public override FValue ArithNot(Scope scope = null)
         {
             return new FLong(-Value);
         }
@@ -135,7 +225,7 @@ namespace FriedLanguage.BuiltinType
             return Value == 1;
         }
 
-        public override FValue Not()
+        public override FValue Not(Scope scope = null)
         {
             return ArithNot();
         }

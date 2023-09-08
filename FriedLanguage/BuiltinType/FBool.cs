@@ -43,13 +43,13 @@ namespace FriedLanguage.BuiltinType
             return val;
         }
 
-        public override FValue Add(FValue other)
+        public override FValue Add(FValue other, Scope scope = null)
         {
             if (other is not FBool otherBool) throw new Exception("Can not perform Add on SInt and " + other.BuiltinName.ToString());
 
             return new FBool((Value && otherBool.Value));
         }
-        public override FValue Equals(FValue other, SyntaxToken callerToken = default)
+        public override FValue Equals(FValue other, SyntaxToken callerToken = default, Scope scope = null)
         {
             if ((callerToken.Text == "is" || callerToken.Text == "is not") && other is FClass fclas)
             {
@@ -81,7 +81,7 @@ namespace FriedLanguage.BuiltinType
             return Value;
         }
 
-        public override FValue Not()
+        public override FValue Not(Scope scope = null)
         {
             return new FBool(!Value);
         }
